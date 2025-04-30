@@ -17,7 +17,6 @@ export class AuthService implements IAuthService {
   verifyToken(token: string): User {
     try {
       const data = jwt.verify(token, config.JWT_SECRET!) as any;
-
       return data;
     } catch (error) {
       throw new Error("user not authorised");

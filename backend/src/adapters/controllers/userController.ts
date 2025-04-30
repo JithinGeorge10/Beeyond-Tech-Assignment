@@ -14,7 +14,7 @@ export class UserController {
     }
 
 
-    async onUserSignUp(req: Request, res: Response, next: NextFunction) {
+    async onCustomerSignUp(req: Request, res: Response, next: NextFunction) {
         try {
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
@@ -26,13 +26,11 @@ export class UserController {
             const data = {
                 _id: user?._id,
                 fullName: user?.fullName,
-                email: user?.email,
                 phoneNumber: user?.phoneNumber,
                 deliveryAddress: user?.deliveryAddress,
               };
 
             const token = this.authService.generateToken(data);
-            console.log(token)
 
             res.setHeader('Authorization', `Bearer ${token}`);
 
@@ -52,4 +50,43 @@ export class UserController {
             next(error);
         }
     }
+
+    async onCustomerLogin(req: Request, res: Response, next: NextFunction) {
+        try {
+          const errors = validationResult(req);
+    
+          if (!errors.isEmpty()) {
+            throw new ErrorResponse("Invalid email or password", 401);
+          }
+          const { email, password } = req.body;          
+          const user = await this.interactor.login(email, password);
+     
+          const data = {
+            _id: user?._id,
+            fullName: user?.fullName,
+            phoneNumber: user?.phoneNumber,
+            deliveryAddress: user?.deliveryAddress,
+          };
+          const token = this.authService.generateToken(data);
+
+          res.setHeader('Authorization', `Bearer ${token}`);
+
+          res.status(201).json({
+              success: true,
+              message: 'Logged in successfully',
+              data: {
+                id: user?._id,
+                fullName: user?.fullName,
+                phoneNumber: user?.phoneNumber,
+                deliveryAddress: user?.deliveryAddress
+              }
+            });
+        } catch (error) {
+          next(error);
+        }
+      }
+
+
+
+
 }

@@ -14,6 +14,7 @@ const controller = new UserController(interactor,authService);
 
 const router = express.Router();
 
-router.post("/register",  controller.onUserSignUp.bind(controller));
+router.post("/register",  controller.onCustomerSignUp.bind(controller));
+router.post("/login",  controller.onCustomerLogin.bind(controller));
 
 export { router as userRouter };
