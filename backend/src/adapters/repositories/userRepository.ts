@@ -2,6 +2,7 @@ import { IUserRepository } from "../../application/interfaces/user/IuserReposito
 import { User } from "../../entities/User";
 import { UserModel } from "../../infrastructure/db/models/userModel";
 import { ErrorResponse } from "../../utils/errors";
+import bcrypt from 'bcrypt';
 
 export class UserRepository implements IUserRepository {
   find(filter: any, page: any): Promise<User[]> {
@@ -21,25 +22,7 @@ export class UserRepository implements IUserRepository {
   }
   search(search: string): Promise<User[]> {
       throw new Error("Method not implemented.");
-  }
-//   async allUsers(): Promise<User[]> {
-//     try {
-//       const users = await UserModel.find({ role: { $ne: "admin" } });
-//       return users;
-//     } catch (error: any) {
-//       throw new ErrorResponse(error.message, error.status);
-//     }
-//   }
-
-
-  async findOne(id: string): Promise<User | null> {
-    try {
-      const data = await UserModel.findById(id);
-      return data;
-    } catch (error: any) {
-      throw new ErrorResponse(error.message, error.status);
-    }
-  }
+  } 
 
   async findByEmail(email: string): Promise<User | null> {
     try {
@@ -51,6 +34,9 @@ export class UserRepository implements IUserRepository {
   }
   async add(user: User): Promise<User> {
     try {
+      const saltRounds = 10;
+      const hashedPassword = await bcrypt.hash(user.password, saltRounds);
+      user.password = hashedPassword;
       const data = new UserModel(user);
       await data.save();
       return data;
