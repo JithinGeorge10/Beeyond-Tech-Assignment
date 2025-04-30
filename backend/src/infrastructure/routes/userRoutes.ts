@@ -1,5 +1,6 @@
 import express from "express";
 import {
+    loginValidator,
     signupValidator,
 } from "../middlewares/userValidation/userValidation";
 import { UserController } from "../../adapters/controllers/userController";
@@ -14,7 +15,7 @@ const controller = new UserController(interactor,authService);
 
 const router = express.Router();
 
-router.post("/register",  controller.onCustomerSignUp.bind(controller));
-router.post("/login",  controller.onCustomerLogin.bind(controller));
+router.post("/register", signupValidator,controller.onCustomerSignUp.bind(controller));
+router.post("/login", loginValidator, controller.onCustomerLogin.bind(controller));
 
 export { router as userRouter };

@@ -1,7 +1,8 @@
 import express from "express";
 import {
+    loginValidator,
     signupValidator,
-} from "../middlewares/userValidation/userValidation";
+} from "../middlewares/deliveryPartnerValidation/deliveryPartnerValidation";
 import { DeliveryPartnerController } from "../../adapters/controllers/deliveryPartnerController";
 import { DeliveryPartnerRepository } from "../../adapters/repositories/deliveryPartnerRepository";
 import { AuthService } from "../services/authService";
@@ -15,7 +16,7 @@ const controller = new DeliveryPartnerController(interactor,authService);
 
 const router = express.Router();
 
-router.post("/register",  controller.onDeliveryPartnerSignUp.bind(controller));
-router.post("/login",  controller.onDeliveryPartnerLogin.bind(controller));
+router.post("/register", signupValidator, controller.onDeliveryPartnerSignUp.bind(controller));
+router.post("/login", loginValidator, controller.onDeliveryPartnerLogin.bind(controller));
 
 export { router as deliveryPartnerRouter };
