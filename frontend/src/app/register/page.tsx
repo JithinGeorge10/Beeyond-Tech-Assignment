@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { Eye, EyeOff } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import customerRegister from '../lib/api/auth/customerRegister'
+import toast from 'react-hot-toast';
 
 function RegisterPage() {
     const router = useRouter()
@@ -15,38 +16,45 @@ function RegisterPage() {
     const [address, setAddress] = useState('')
     const [showPassword, setShowPassword] = useState(false)
     const [error, setError] = useState('')
+    const [loading, setLoading] = useState(false);
 
     const handleRegister = async () => {
+        try {
+            setLoading(true);
 
-        if (!name || !email || !password || !phone || (role === 'Customer' && !address)) {
-            setError('Please fill in all required fields.')
-            return
-        }
-
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-        if (!emailRegex.test(email)) {
-            setError('Please enter a valid email address.')
-            return
-        }
-
-        setError('')
-        console.log(`Registering ${role}`, { name, email, password, phone, ...(role === 'Customer' && { address }) })
-
-        if (role === 'Customer') {
-            console.log('customer reached');
-            
-            const userDetails = {
-                fullName: name,
-                email: email,
-                password: password,
-                phoneNumber: phone,
-                deliveryAddress: address
+            if (!name || !email || !password || !phone || (role === 'Customer' && !address)) {
+                setError('Please fill in all required fields.')
+                return
             }
-            console.log(userDetails);
-            
-            const response = await customerRegister(userDetails)
-            console.log(response);
-            
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+            if (!emailRegex.test(email)) {
+                setError('Please enter a valid email address.')
+                return
+            }
+
+            setError('')
+            console.log(`Registering ${role}`, { name, email, password, phone, ...(role === 'Customer' && { address }) })
+
+            if (role === 'Customer') {
+                const userDetails = {
+                    fullName: name,
+                    email: email,
+                    password: password,
+                    phoneNumber: phone,
+                    deliveryAddress: address
+                }
+
+                const response = await customerRegister(userDetails)
+                console.log(response);
+                if (response.success) {
+                    toast.success(response.message);
+                    router.push('/login');
+                }
+            }
+        } catch (error: any) {
+            setLoading(false)
+            toast.error(error.message || 'Registration failed');
         }
     }
 
@@ -62,8 +70,8 @@ function RegisterPage() {
                         <button
                             key={r}
                             className={`flex-1 py-2 text-sm rounded-md border transition ${role === r
-                                    ? 'bg-black text-white'
-                                    : 'bg-gray-100 text-black hover:bg-gray-200'
+                                ? 'bg-black text-white'
+                                : 'bg-gray-100 text-black hover:bg-gray-200'
                                 }`}
                             onClick={() => setRole(r)}
                         >
@@ -142,22 +150,18 @@ function RegisterPage() {
                 {/* Error */}
                 {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
 
-                {/* Register Button */}
-                <button
-                    className="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800 transition"
-                    onClick={handleRegister}
-                >
-                    Register
-                </button>
 
-                {/* Login Link */}
+
                 <p className="text-center text-sm text-gray-600 mt-4">
                     Already have an account?{' '}
                     <button
-                        onClick={() => router.push('/login')}
-                        className="text-black hover:underline font-medium"
+                        type="submit"
+                        onClick={handleRegister}
+                        disabled={loading}
+                        className={`w-full bg-black text-white py-2 rounded-md transition ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-800'
+                            }`}
                     >
-                        Login
+                        {loading ? 'Registering...' : 'Register'}
                     </button>
                 </p>
             </div>
