@@ -52,7 +52,7 @@ function RegisterPage() {
                 console.log(response);
                 if (response.success) {
                     toast.success(response.message);
-                    router.push('/HomePage');
+                    router.push('/ShopPage');
                 }
             }
 
@@ -69,7 +69,7 @@ function RegisterPage() {
                 console.log(response);
                 if (response.success) {
                     toast.success(response.message);
-                    router.push('/HomePage');
+                    router.push('/DeliveryPartnerPage');
                 }
             }
         } catch (error: any) {
