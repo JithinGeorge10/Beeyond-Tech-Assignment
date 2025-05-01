@@ -2,6 +2,10 @@
 import React, { useState } from 'react'
 import { Eye, EyeOff } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import toast from 'react-hot-toast'
+import { customerLogin } from '../lib/api/auth/customer'
+import { deliveryPartnerLogin } from '../lib/api/auth/deliveryPartner'
+import { adminLogin } from '../lib/api/auth/admin'
 
 
 function LoginPage() {
@@ -12,21 +16,65 @@ function LoginPage() {
     const [showPassword, setShowPassword] = useState(false)
     const [error, setError] = useState('')
     const [selectedRole, setSelectedRole] = useState('Customer')
+    const [loading, setLoading] = useState(false);
 
-    const handleLogin = () => {
+    const handleLogin = async() => {
+        setLoading(true);
         if (!email || !password) {
+            setLoading(false);
             setError('Please enter both email and password.')
             return
         }
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
         if (!emailRegex.test(email)) {
+            setLoading(false);
             setError('Please enter a valid email address.')
             return
         }
 
         setError('')
         console.log(`Logging in as ${selectedRole}:`, { email, password })
+
+        if (selectedRole==='Customer') {
+            const userDetails = {
+                email: email,
+                password: password,
+            }
+
+            const response = await customerLogin(userDetails)
+            console.log(response);
+            if (response.success) {
+                toast.success(response.message);
+                router.push('/HomePage');
+            }
+        }
+        if (selectedRole==='Delivery Partner') {
+            const deliveryPartnerDetails = {
+                email: email,
+                password: password,
+            }
+
+            const response = await deliveryPartnerLogin(deliveryPartnerDetails)
+            console.log(response);
+            if (response.success) {
+                toast.success(response.message);
+                router.push('/DeliveryPage');
+            }
+        }
+        if (selectedRole==='Admin') {
+            const adminDetails = {
+                email: email,
+                password: password,
+            }
+
+            const response = await adminLogin(adminDetails)
+            console.log(response);
+            if (response.success) {
+                toast.success(response.message);
+                router.push('/AdminPage');
+            }
+        }
     }
 
 
@@ -42,8 +90,8 @@ function LoginPage() {
                         <button
                             key={role}
                             className={`flex-1 py-2 text-sm rounded-md border transition ${selectedRole === role
-                                    ? 'bg-black text-white'
-                                    : 'bg-gray-100 text-black hover:bg-gray-200'
+                                ? 'bg-black text-white'
+                                : 'bg-gray-100 text-black hover:bg-gray-200'
                                 }`}
                             onClick={() => setSelectedRole(role)}
                         >
@@ -88,10 +136,13 @@ function LoginPage() {
 
                 {/* Login Button */}
                 <button
-                    className="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800 transition"
+                    type="submit"
                     onClick={handleLogin}
+                    disabled={loading}
+                    className={`w-full bg-black text-white py-2 rounded-md transition ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-800'
+                        }`}
                 >
-                    Login
+                    {loading ? 'Please wait...' : 'Login'}
                 </button>
 
                 <p className="text-center text-sm text-gray-600 mt-4">

@@ -2,8 +2,8 @@
 import React, { useState } from 'react'
 import { Eye, EyeOff } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import {customerRegister,deliveryPartnerRegister} from '../lib/api/auth/customerRegister'
-
+import { customerRegister } from '../lib/api/auth/customer'
+import { deliveryPartnerRegister } from '../lib/api/auth/deliveryPartner'
 import toast from 'react-hot-toast';
 
 function RegisterPage() {
@@ -56,7 +56,7 @@ function RegisterPage() {
                 }
             }
 
-            
+
             if (role === 'Delivery Partner') {
                 const deliveryPartnerDetails = {
                     fullName: name,
@@ -171,16 +171,16 @@ function RegisterPage() {
                 {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
 
                 <button
-                        type="submit"
-                        onClick={handleRegister}
-                        disabled={loading}
-                        className={`w-full bg-black text-white py-2 rounded-md transition ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-800'
-                            }`}
-                    >
-                        {loading ? 'Registering...' : 'Register'}
-                    </button>
+                    type="submit"
+                    onClick={handleRegister}
+                    disabled={loading}
+                    className={`w-full bg-black text-white py-2 rounded-md transition ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-800'
+                        }`}
+                >
+                    {loading ? 'Registering...' : 'Register'}
+                </button>
 
-                    <p className="text-center text-sm text-gray-600 mt-4">
+                <p className="text-center text-sm text-gray-600 mt-4">
                     Already having an account?{' '}
                     <button
                         onClick={() => router.push('/login')}
