@@ -3,9 +3,9 @@ import React, { useState } from 'react'
 import { Eye, EyeOff } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
-import { customerLogin } from '../lib/api/auth/customer'
-import { deliveryPartnerLogin } from '../lib/api/auth/deliveryPartner'
-import { adminLogin } from '../lib/api/auth/admin'
+import { customerLogin } from '../../lib/api/auth/customer'
+import { deliveryPartnerLogin } from '../../lib/api/auth/deliveryPartner'
+import { adminLogin } from '../../lib/api/auth/admin'
 
 
 function LoginPage() {
@@ -46,7 +46,7 @@ function LoginPage() {
             console.log(response);
             if (response.success) {
                 toast.success(response.message);
-                router.push('/HomePage');
+                router.push('/ShopPage');
             }
         }
         if (selectedRole==='Delivery Partner') {

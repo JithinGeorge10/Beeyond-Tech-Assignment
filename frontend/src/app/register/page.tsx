@@ -2,8 +2,8 @@
 import React, { useState } from 'react'
 import { Eye, EyeOff } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { customerRegister } from '../lib/api/auth/customer'
-import { deliveryPartnerRegister } from '../lib/api/auth/deliveryPartner'
+import { customerRegister } from '../../lib/api/auth/customer'
+import { deliveryPartnerRegister } from '../../lib/api/auth/deliveryPartner'
 import toast from 'react-hot-toast';
 
 function RegisterPage() {

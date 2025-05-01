@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useEffect } from 'react';
-import { ApiResponse, Product } from '../lib/types/products';
-import { fetchProductsAPI } from '../lib/api/products/products';
+import { ApiResponse, Product } from '../../lib/types/products';
+import { fetchProductsAPI } from '../../lib/api/products/products';
 
 const HomePage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');
