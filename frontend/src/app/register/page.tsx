@@ -2,7 +2,8 @@
 import React, { useState } from 'react'
 import { Eye, EyeOff } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import customerRegister from '../lib/api/auth/customerRegister'
+import {customerRegister,deliveryPartnerRegister} from '../lib/api/auth/customerRegister'
+
 import toast from 'react-hot-toast';
 
 function RegisterPage() {
@@ -24,12 +25,14 @@ function RegisterPage() {
 
             if (!name || !email || !password || !phone || (role === 'Customer' && !address)) {
                 setError('Please fill in all required fields.')
+                setLoading(false);
                 return
             }
 
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
             if (!emailRegex.test(email)) {
                 setError('Please enter a valid email address.')
+                setLoading(false);
                 return
             }
 
@@ -49,7 +52,24 @@ function RegisterPage() {
                 console.log(response);
                 if (response.success) {
                     toast.success(response.message);
-                    router.push('/login');
+                    router.push('/HomePage');
+                }
+            }
+
+            
+            if (role === 'Delivery Partner') {
+                const deliveryPartnerDetails = {
+                    fullName: name,
+                    email: email,
+                    password: password,
+                    phoneNumber: phone,
+                }
+
+                const response = await deliveryPartnerRegister(deliveryPartnerDetails)
+                console.log(response);
+                if (response.success) {
+                    toast.success(response.message);
+                    router.push('/HomePage');
                 }
             }
         } catch (error: any) {
@@ -150,11 +170,7 @@ function RegisterPage() {
                 {/* Error */}
                 {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
 
-
-
-                <p className="text-center text-sm text-gray-600 mt-4">
-                    Already have an account?{' '}
-                    <button
+                <button
                         type="submit"
                         onClick={handleRegister}
                         disabled={loading}
@@ -162,6 +178,15 @@ function RegisterPage() {
                             }`}
                     >
                         {loading ? 'Registering...' : 'Register'}
+                    </button>
+
+                    <p className="text-center text-sm text-gray-600 mt-4">
+                    Already having an account?{' '}
+                    <button
+                        onClick={() => router.push('/login')}
+                        className="text-black hover:underline font-medium"
+                    >
+                        Login
                     </button>
                 </p>
             </div>

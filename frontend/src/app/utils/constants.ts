@@ -19,7 +19,7 @@ axiosInstance.interceptors.request.use(
 );
 
 export const deliveryPartneraxiosInstance = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_SERVER_HOST,
+    baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
     withCredentials: true,
   });
   
@@ -37,7 +37,7 @@ export const deliveryPartneraxiosInstance = axios.create({
   );
 
 export const adminAxiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_SERVER_HOST,
+  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
   withCredentials: true,
 });
 
