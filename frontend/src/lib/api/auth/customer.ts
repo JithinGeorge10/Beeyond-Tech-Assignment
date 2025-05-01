@@ -14,6 +14,10 @@ export const customerRegister = async (userDetails: RegisterRequest): Promise<Re
 export const customerLogin = async (userDetails: LoginRequest): Promise<LoginResponse> => {
   try {
     const response = await axiosInstance.post<LoginResponse>('/api/customer/login', userDetails);
+    const token = response.headers['authorization']?.split(' ')[1]; 
+    if (token) {
+      localStorage.setItem('userAccessToken', token); 
+    }
     return response.data;
   } catch (error: any) {
     throw error.response?.data || { message: 'Login failed' };

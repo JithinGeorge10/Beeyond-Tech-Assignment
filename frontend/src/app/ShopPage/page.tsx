@@ -70,10 +70,10 @@ const HomePage: React.FC = () => {
 
       {/* Banner */}
       <div className="container mx-auto mt-8 px-4">
-        <div className="bg-purple-400 rounded-xl p-8 text-center text-white">
-          <h2 className="text-4xl font-bold mb-4">Fast delivery at your fingertips</h2>
-          <p className="text-lg mb-6">Order what you need and track it in real-time with QuickTrack.</p>
-          <button className="bg-white text-purple-600 px-8 py-3 rounded-lg font-semibold hover:bg-purple-50">
+        <div className="bg-purple-100 rounded-xl p-8 text-center text-white">
+          <h2 className="text-4xl text-black font-bold mb-4">Fast delivery at your fingertips</h2>
+          <p className="text-lg text-black mb-6">Order what you need and track it in real-time with Quick Commerce.</p>
+          <button className="bg-white text-black px-8 py-3 rounded-lg font-semibold hover:bg-purple-50">
             Browse Products
           </button>
         </div>
