@@ -2,7 +2,11 @@
 import React, { useState, useEffect } from 'react';
 import { ApiResponse, Product } from '../../lib/types/products';
 import { fetchProductsAPI } from '../../lib/api/products/products';
-import { FaShoppingCart } from 'react-icons/fa';  // Import the cart icon from react-icons
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
+import Banner from '@/components/Banner';
+import { useCart } from '@/context/CartContext';
+import toast from 'react-hot-toast';
 
 const HomePage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -10,7 +14,7 @@ const HomePage: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [userDetails, setUserDetails] = useState<User | null>(null); // State to store user details
+  const { addToCart, totalItems } = useCart();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -25,14 +29,9 @@ const HomePage: React.FC = () => {
         setIsLoading(false);
       }
     };
-    const storedUserDetails = localStorage.getItem('customerDetails');
-    if (storedUserDetails) {
-      setUserDetails(JSON.parse(storedUserDetails));
-    }
 
     fetchProducts();
   }, []);
-  console.log(userDetails);
 
   // Get unique categories from products
   const categories = ['all', ...new Set(products.map(product => product.category))];
@@ -66,45 +65,64 @@ const HomePage: React.FC = () => {
     }
     return title;
   };
+
+
+
+
+  //////handle cart function
+
+
+  const handleAddToCart = (product: Product) => {
+    const cartItems = JSON.parse(localStorage.getItem('cart') || '[]');
+    const currentItem = cartItems.find((item: any) => item.id === String(product.id));
+    if (currentItem) {
+      currentItem.quantity += 1; // Increase quantity by 1
+      // Save the updated cart back to localStorage
+      localStorage.setItem('cart', JSON.stringify(cartItems));
+
+      // Show success message
+      toast.success(`${product.model} quantity increased to ${currentItem.quantity}`);
+    } else {
+      // If product is not in the cart, add it as a new item
+      cartItems.push({
+        id: String(product.id),
+        title: product.title,
+        price: product.price,
+        quantity: 1, // Initial quantity is 1
+      });
+
+      // Save the new cart state to localStorage
+      localStorage.setItem('cart', JSON.stringify(cartItems));
+
+      // Show success message
+      toast.success(`${product.model} added to cart`);
+    }
+    // Add product to cart and update state
+    addToCart({
+      id: String(product.id),
+      title: product.title,
+      price: product.price,
+      quantity: 1,
+    });
+
+  };
+
+
+
+
+
+
+
   return (
     <div className="min-h-screen flex flex-col bg-white">
       {/* Navbar */}
-      <nav className="bg-purple-50 border-b border-purple-100 p-4">
-        <div className="container mx-auto flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-black">Quick Commerce</h1>
-          <div className="flex gap-4 items-center">
-            {userDetails ? (
-              <div className="flex items-center gap-5">
-                <FaShoppingCart className="text-purple-600" size={20} />
-                <span className="text-purple-600 font-semibold">
-                  Welcome, {userDetails.data.fullName}
-                </span>
-
-              </div>
-
-            ) : (
-              <button className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
-                Sign In
-              </button>
-            )}
-          </div>
-        </div>
-      </nav>
-
+      <Navbar></Navbar>
       {/* Banner */}
-      <div className="container mx-auto mt-8 px-4">
-        <div className="bg-purple-100 rounded-xl p-8 text-center text-white">
-          <h2 className="text-4xl text-black font-bold mb-4">Fast delivery at your fingertips</h2>
-          <p className="text-lg text-black mb-6">Order what you need and track it in real-time with Quick Commerce.</p>
-          <button className="bg-white text-black px-8 py-3 rounded-lg font-semibold hover:bg-purple-50">
-            Browse Products
-          </button>
-        </div>
-      </div>
+      <Banner></Banner>
 
       {/* Search & Filters */}
       <div className="container mx-auto px-4 mt-8">
-        <div className="mb-8">
+        <div className="mb-8 flex justify-between items-center">
           <input
             type="text"
             placeholder="Search products..."
@@ -112,9 +130,15 @@ const HomePage: React.FC = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
+          {totalItems > 0 && (
+            <button className="bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
+              View Cart ({totalItems})
+            </button>
+          )}
+
         </div>
 
-        <div className="flex flex-wrap gap-3 mb-8">
+        <div className="mb-8 flex justify-center items-center gap-4">
           {categories.map(category => (
             <button
               key={category}
@@ -145,7 +169,7 @@ const HomePage: React.FC = () => {
               <p className="text-purple-600 font-bold text-xl mb-4">${product.price}</p>
               <div className="flex justify-between items-center">
                 <span className="text-sm text-gray-500">{truncateTitle(product.title)}</span>
-                <button className="bg-purple-50 text-purple-600 px-4 py-2 rounded-lg hover:bg-purple-100 transition-colors">
+                <button onClick={() => handleAddToCart(product)} className="bg-purple-50 text-purple-600 px-4 py-2 rounded-lg hover:bg-purple-100 transition-colors">
                   Add to Cart
                 </button>
               </div>
@@ -155,17 +179,7 @@ const HomePage: React.FC = () => {
       </div>
 
       {/* Footer */}
-      <footer className="bg-purple-50 border-t border-purple-100 py-8">
-        <div className="container mx-auto text-center">
-          <div className="flex justify-center gap-6 mb-4">
-            <a href="#" className="text-purple-600 hover:text-purple-700">About</a>
-            <a href="#" className="text-purple-600 hover:text-purple-700">Contact</a>
-            <a href="#" className="text-purple-600 hover:text-purple-700">FAQ</a>
-            <a href="#" className="text-purple-600 hover:text-purple-700">Shipping</a>
-          </div>
-          <p className="text-gray-600">© 2023 Quick Commerce. All rights reserved.</p>
-        </div>
-      </footer>
+      <Footer></Footer>
     </div>
   );
 };

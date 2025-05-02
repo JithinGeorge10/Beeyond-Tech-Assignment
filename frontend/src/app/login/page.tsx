@@ -10,10 +10,26 @@ import { adminLogin } from '../../lib/api/auth/admin'
 
 function LoginPage() {
     useEffect(() => {
-        const user = localStorage.getItem('userAccessToken');
-        if (user) {
-            router.replace('/ShopPage'); // redirect to home
-        }
+        const checkToken = async () => {
+            const token = localStorage.getItem('userAccessToken');
+
+            if (!token) return; 
+
+            const res = await fetch('/api/verify-token', {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            const isValid = await res.json();
+            console.log(isValid);
+            
+            if (isValid.success) {
+                router.replace('/ShopPage'); 
+            }
+        };
+
+        checkToken();
     }, []);
     const router = useRouter()
 
