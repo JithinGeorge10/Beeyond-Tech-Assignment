@@ -19,6 +19,7 @@ const router = express.Router();
 
 router.post("/register", signupValidator,controller.onCustomerSignUp.bind(controller));
 router.post("/login", loginValidator, controller.onCustomerLogin.bind(controller));
+router.post("/order", authenticateToken, controller.onCustomerOrder.bind(controller));
 router.delete("/logout",authenticateToken,controller.onUserLogout.bind(controller));
 
 

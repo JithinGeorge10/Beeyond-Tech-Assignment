@@ -5,4 +5,7 @@ export interface IUserInteractor {
   signup(user: User): Promise<User>;
   login(email: string, password: string): Promise<User | null>;
   blackListedToken(token:String): Promise<any | null>;
+  addOrder(items:[],total:number,address:string,userId:string): Promise<any | null>;
+
+  
 }

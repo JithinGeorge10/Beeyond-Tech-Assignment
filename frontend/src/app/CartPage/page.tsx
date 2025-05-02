@@ -5,6 +5,7 @@ import Navbar from '@/components/Navbar';
 import { useCart } from '@/context/CartContext';
 import { User } from '@/lib/types/user';
 import { useRouter } from 'next/navigation'
+import {  orderItems } from '@/lib/api/orders/orders';
 
 export default function CartPage() {
     const router = useRouter();
@@ -43,6 +44,41 @@ export default function CartPage() {
 
     const subtotal = cart.reduce((total: any, item: any) => total + item.price * item.quantity, 0);
     const total = subtotal;
+
+    const handleCheckout =async () => {
+        if (!userDetails || !userDetails.data?.deliveryAddress || !userDetails.data?.id) {
+            alert("Missing user details. Please login again.");
+            return;
+        }
+        const items = cart.map(item => ({
+            productName: item.title,
+            price: item.price.toString(),
+            quantity: item.quantity
+        }));
+        const cartDetails = {
+            items,
+            total: total.toString(),
+            address: userDetails?.data.deliveryAddress,
+            userId: userDetails?.data.id
+        };
+        
+        
+        try {
+            const response = await orderItems(cartDetails); 
+            console.log(response);
+            
+            if (response) {
+                alert("Order placed successfully!");
+                clearCart();
+                router.push('/ShopPage'); 
+            } else {
+                alert("Failed to place order. Please try again.");
+            }
+        } catch (error) {
+            console.error("Checkout error:", error);
+            alert("An error occurred during checkout.");
+        }
+    }
 
     return (
         <>
@@ -127,7 +163,7 @@ export default function CartPage() {
                             className="w-full text-black mt-2 p-2 border rounded"
                             readOnly
                         />
-                        <button className="w-full mt-4 p-2 bg-purple-500 text-white rounded hover:bg-purple-600">
+                        <button onClick={handleCheckout} className="w-full mt-4 p-2 bg-purple-500 text-white rounded hover:bg-purple-600">
                             Checkout
                         </button>
                     </div>

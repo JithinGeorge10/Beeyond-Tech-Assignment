@@ -94,10 +94,39 @@ export class UserController {
         res.status(403).json({ message: "Unauthorized user" });
         return;
       }
-      const token=(req as any).token
-      const blackListedToken = await this.interactor.blackListedToken(token);
+      const token = (req as any).token
+      await this.interactor.blackListedToken(token);
 
-      res.status(200).json({ message: "Logout successful" });
+      res.status(201).json({
+        success: true,
+        message: 'Logged out successfully'
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async onCustomerOrder(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const user = (req as any).user;
+      if (!user || !user._id) {
+        res.status(403).json({ message: "Unauthorized user" });
+        return;
+      }
+      console.log(req.body);
+      const { items, total, address, userId } = req.body
+      const order = await this.interactor.addOrder(items, total, address, userId);
+
+      console.log(order);
+
+
+      res.status(201).json({
+        success: true,
+        message: 'Logged in successfully',
+        data: {
+          orderId: order,
+        }
+      });
     } catch (error) {
       next(error);
     }

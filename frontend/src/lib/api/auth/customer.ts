@@ -42,11 +42,11 @@ export const customerLogout = async (): Promise<any> => {
   try {
     const token = localStorage.getItem("userAccessToken");
 
-    const response = axios.delete(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/customer/logout`, {
+    const response =await axios.delete(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/customer/logout`, {
       headers: {
         Authorization: `Bearer ${token}`
       },
-      withCredentials: true  // if you're using cookies too
+      withCredentials: true 
     });
 
     console.log(response);

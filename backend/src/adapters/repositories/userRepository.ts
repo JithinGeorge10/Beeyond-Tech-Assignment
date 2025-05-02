@@ -2,10 +2,17 @@ import { IUserRepository } from "../../application/interfaces/user/IuserReposito
 import { User } from "../../entities/User";
 import { UserModel } from "../../infrastructure/db/models/userModel";
 import TokenBlacklist from '../../infrastructure/db/models/tokenBlackList'; 
+import Order from '../../infrastructure/db/models/orderModel'; 
+
 import { ErrorResponse } from "../../utils/errors";
 import bcrypt from 'bcrypt';
+import { Types } from "mongoose";
+import { OrderDocument } from "../../application/types/order";
 
 export class UserRepository implements IUserRepository {
+  createOrder(items: [], total: number, address: string, userId: string): Promise<any> {
+    throw new Error("Method not implemented.");
+  }
   find(filter: any, page: any): Promise<User[]> {
     throw new Error("Method not implemented.");
   }
@@ -69,4 +76,26 @@ export class UserRepository implements IUserRepository {
       throw new ErrorResponse(error.message, error.status || 500);
     }
   }
+  
+  
+async addOrder(
+  items: [],
+  total: number,
+  address: string,
+  userId: string
+): Promise<string | null> {
+  try {
+    const newOrder: OrderDocument = await Order.create({
+      items,
+      total,
+      address,
+      userId: new Types.ObjectId(userId),
+    });
+
+    return newOrder._id.toString();
+  } catch (error: any) {
+    throw new ErrorResponse(error.message, error.status || 500);
+  }
+}
+
 }

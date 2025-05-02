@@ -60,12 +60,14 @@ export class UserInteractor implements IUserInteractor {
 
       let user = await this.repository.addTokenBlackList(token);
 
+      return user
+
     } catch (error: any) {
       throw new ErrorResponse(error.message, error.status);
     }
   }
 
-  
+
   async findByBlackListToken(token: string): Promise<any | null> {
     try {
       console.log(token);
@@ -76,7 +78,18 @@ export class UserInteractor implements IUserInteractor {
       }
 
       let user = await this.repository.addTokenBlackList(token);
+      return user
+    } catch (error: any) {
+      throw new ErrorResponse(error.message, error.status);
+    }
+  }
 
+
+  async addOrder(items: [], total: number, address: string, userId: string): Promise<any | null> {
+    try {
+    
+      const orderId = await this.repository.createOrder(items,total,address,userId);
+      return orderId
     } catch (error: any) {
       throw new ErrorResponse(error.message, error.status);
     }
