@@ -1,13 +1,46 @@
 'use client'
+import { useEffect, useState } from 'react';
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import { useCart } from '@/context/CartContext';
-import { useCustomer } from '@/context/UserContext';
+import { User } from '@/lib/types/user';
+import { useRouter } from 'next/navigation'
 
 export default function CartPage() {
-    const { cart, updateQuantity, clearCart,removeFromCart  } = useCart();
-    const { user } = useCustomer()
-    console.log(user)
+    const router = useRouter();
+
+    const { cart, updateQuantity, clearCart, removeFromCart } = useCart();
+    const [userDetails, setUserDetails] = useState<User | null>(null);
+
+    useEffect(() => {
+        const checkAuthAndLoadUser = async () => {
+
+            const token = localStorage.getItem('userAccessToken'); // assuming token is stored here
+            if (!token) {
+                router.push('/Login');
+                return;
+            }
+
+            const res = await fetch('/api/verify-token', {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            if (res.status !== 200) {
+                router.push('/login');
+                return;
+            }
+
+            const storedUserDetails = localStorage.getItem('customerDetails');
+            if (storedUserDetails) {
+                setUserDetails(JSON.parse(storedUserDetails));
+            }
+        };
+
+        checkAuthAndLoadUser();
+    }, [router]);
+
     const subtotal = cart.reduce((total: any, item: any) => total + item.price * item.quantity, 0);
     const total = subtotal;
 
@@ -53,7 +86,6 @@ export default function CartPage() {
                                     >
                                         Delete
                                     </button>
-
                                 </div>
                             </div>
                         ))}
@@ -75,23 +107,23 @@ export default function CartPage() {
                             </div>
                         </div>
 
+                        {/* Ensure inputs are controlled */}
                         <input
                             type="text"
-                            value={user?.data?.fullName || ''}
+                            value={userDetails?.data?.fullName || ''}
                             className="w-full text-black mt-2 p-2 border rounded"
                             readOnly
                         />
 
-
                         <input
                             type="tel"
-                            value={user?.data?.phoneNumber || ''}
+                            value={userDetails?.data?.phoneNumber || ''}
                             className="w-full text-black mt-2 p-2 border rounded"
                             readOnly
                         />
 
                         <textarea
-                            value={user?.data?.deliveryAddress || ''}
+                            value={userDetails?.data?.deliveryAddress || ''}
                             className="w-full text-black mt-2 p-2 border rounded"
                             readOnly
                         />

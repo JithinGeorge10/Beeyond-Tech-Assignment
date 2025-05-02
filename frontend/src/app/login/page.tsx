@@ -9,6 +9,8 @@ import { adminLogin } from '../../lib/api/auth/admin'
 
 
 function LoginPage() {
+    const router = useRouter()
+
     useEffect(() => {
         const checkToken = async () => {
             const token = localStorage.getItem('userAccessToken');
@@ -31,7 +33,6 @@ function LoginPage() {
 
         checkToken();
     }, []);
-    const router = useRouter()
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')

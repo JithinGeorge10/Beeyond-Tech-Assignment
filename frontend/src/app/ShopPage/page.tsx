@@ -8,6 +8,7 @@ import Banner from '@/components/Banner';
 import { useCart } from '@/context/CartContext';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation'
+import { User } from '@/lib/types/user';
 
 const HomePage: React.FC = () => {
   const router = useRouter()
@@ -17,8 +18,9 @@ const HomePage: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+      const [userDetails, setUserDetails] = useState<User | null>(null);
+  
   const { addToCart, totalItems } = useCart();
-
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -26,6 +28,10 @@ const HomePage: React.FC = () => {
         if (!response.ok) throw new Error('Failed to fetch products');
         const data: ApiResponse = await response.json();
         setProducts(data.products);
+        const storedUserDetails = localStorage.getItem('customerDetails');
+        if (storedUserDetails) {
+            setUserDetails(JSON.parse(storedUserDetails));
+        }
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Unknown error occurred');
       } finally {
@@ -76,6 +82,12 @@ const HomePage: React.FC = () => {
 
 
   const handleAddToCart = (product: Product) => {
+    const userAccessToken = localStorage.getItem('userAccessToken');
+    if (!userAccessToken) {
+      toast.error('You must be logged in to add items to the cart.');
+      router.push('/Login'); 
+      return;
+    }
     const cartItems = JSON.parse(localStorage.getItem('cart') || '[]');
     const currentItem = cartItems.find((item: any) => item.id === String(product.id));
     if (currentItem) {
@@ -132,7 +144,7 @@ const HomePage: React.FC = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
-          {totalItems > 0 && (
+          {userDetails && totalItems > 0 && (
             <button onClick={() => router.push('/CartPage')} className="bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
               View Cart ({totalItems})
             </button>
