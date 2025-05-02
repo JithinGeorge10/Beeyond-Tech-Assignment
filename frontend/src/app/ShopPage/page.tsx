@@ -7,8 +7,11 @@ import Footer from '@/components/Footer';
 import Banner from '@/components/Banner';
 import { useCart } from '@/context/CartContext';
 import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation'
 
 const HomePage: React.FC = () => {
+  const router = useRouter()
+
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [products, setProducts] = useState<Product[]>([]);
@@ -88,6 +91,7 @@ const HomePage: React.FC = () => {
         id: String(product.id),
         title: product.title,
         price: product.price,
+        image:product.image,
         quantity: 1, // Initial quantity is 1
       });
 
@@ -99,18 +103,16 @@ const HomePage: React.FC = () => {
     }
     // Add product to cart and update state
     addToCart({
-      id: String(product.id),
+      id: Number(product.id),
       title: product.title,
       price: product.price,
       quantity: 1,
+      image: product.image,
+      unitPrice: 0,
+      qty: 0
     });
 
   };
-
-
-
-
-
 
 
   return (
@@ -131,7 +133,7 @@ const HomePage: React.FC = () => {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
           {totalItems > 0 && (
-            <button className="bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
+            <button onClick={() => router.push('/CartPage')} className="bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
               View Cart ({totalItems})
             </button>
           )}

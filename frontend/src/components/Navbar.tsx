@@ -1,8 +1,10 @@
+'use client'
 import { useCart } from '@/context/CartContext';
 import React, { useEffect, useState } from 'react';
 import { FaShoppingCart } from 'react-icons/fa';
 import { FiLogOut } from 'react-icons/fi';
 import { useRouter } from 'next/navigation'
+import { User } from '@/lib/types/user';
 
 function Navbar() {
     const router = useRouter()

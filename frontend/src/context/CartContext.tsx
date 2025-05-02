@@ -37,10 +37,21 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         });
     };
 
+    const updateQuantity = (id: number, change: number) => {
+        setCart(prev =>
+            prev.map(item =>
+                item.id === id
+                    ? { ...item, quantity: Math.max(1, item.quantity + change) }
+                    : item
+            )
+        );
+    };
+    const clearCart = () => setCart([]);
+
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
 
     return (
-        <CartContext.Provider value={{ cart, addToCart, totalItems }}>
+        <CartContext.Provider value={{ cart, addToCart, updateQuantity, totalItems, clearCart }}>
             {children}
         </CartContext.Provider>
     );

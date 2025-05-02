@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from 'react-hot-toast';
 import { CartProvider } from "@/context/CartContext";
+import { UserProvider } from "@/context/UserContext";
 
 
 
@@ -20,7 +21,7 @@ export default function RootLayout({
     <html lang="en">
       <body
       >
-        <CartProvider>{children}</CartProvider>
+       <UserProvider><CartProvider>{children}</CartProvider></UserProvider> 
         <Toaster position="top-center" reverseOrder={false} />
 
       </body>
