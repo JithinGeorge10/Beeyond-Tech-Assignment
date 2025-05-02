@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { ApiResponse, Product } from '../../lib/types/products';
 import { fetchProductsAPI } from '../../lib/api/products/products';
+import { FaShoppingCart } from 'react-icons/fa';  // Import the cart icon from react-icons
 
 const HomePage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -9,6 +10,7 @@ const HomePage: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [userDetails, setUserDetails] = useState<User | null>(null); // State to store user details
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -23,9 +25,14 @@ const HomePage: React.FC = () => {
         setIsLoading(false);
       }
     };
-    
+    const storedUserDetails = localStorage.getItem('customerDetails');
+    if (storedUserDetails) {
+      setUserDetails(JSON.parse(storedUserDetails));
+    }
+
     fetchProducts();
   }, []);
+  console.log(userDetails);
 
   // Get unique categories from products
   const categories = ['all', ...new Set(products.map(product => product.category))];
@@ -52,7 +59,13 @@ const HomePage: React.FC = () => {
       </div>
     );
   }
-
+  const truncateTitle = (title: string) => {
+    const words = title.split(' ');
+    if (words.length > 5) {
+      return words.slice(0, 5).join(' ') + '...';
+    }
+    return title;
+  };
   return (
     <div className="min-h-screen flex flex-col bg-white">
       {/* Navbar */}
@@ -60,10 +73,20 @@ const HomePage: React.FC = () => {
         <div className="container mx-auto flex justify-between items-center">
           <h1 className="text-2xl font-bold text-black">Quick Commerce</h1>
           <div className="flex gap-4 items-center">
-            {/* <button className="text-purple-600 hover:text-purple-700">Cart (0)</button>
-            <button className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
-              Sign In
-            </button> */}
+            {userDetails ? (
+              <div className="flex items-center gap-5">
+                <FaShoppingCart className="text-purple-600" size={20} />
+                <span className="text-purple-600 font-semibold">
+                  Welcome, {userDetails.data.fullName}
+                </span>
+
+              </div>
+
+            ) : (
+              <button className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
+                Sign In
+              </button>
+            )}
           </div>
         </div>
       </nav>
@@ -96,11 +119,10 @@ const HomePage: React.FC = () => {
             <button
               key={category}
               onClick={() => setSelectedCategory(category)}
-              className={`px-4 py-2 rounded-full transition-colors ${
-                selectedCategory === category 
-                  ? 'bg-purple-600 text-white' 
-                  : 'bg-purple-50 text-purple-600 hover:bg-purple-100'
-              }`}
+              className={`px-4 py-2 rounded-full transition-colors ${selectedCategory === category
+                ? 'bg-purple-600 text-white'
+                : 'bg-purple-50 text-purple-600 hover:bg-purple-100'
+                }`}
             >
               {category.charAt(0).toUpperCase() + category.slice(1)}
             </button>
@@ -113,15 +135,16 @@ const HomePage: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 pb-12">
           {filteredProducts.map(product => (
             <div key={product.id} className="bg-white p-6 rounded-xl border border-gray-100 hover:shadow-lg transition-shadow">
-              <img 
-                src={product.image} 
+              <img
+                src={product.image}
                 alt={product.title}
                 className="h-64 w-full object-contain mb-4 rounded-lg bg-gray-100"
               />
               <h3 className="font-semibold text-black text-lg mb-2">{product.brand}</h3>
+              <h3 className="font-semibold text-purple-400 text-lg mb-2">{product.model}</h3>
               <p className="text-purple-600 font-bold text-xl mb-4">${product.price}</p>
               <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-500">{product.title}</span>
+                <span className="text-sm text-gray-500">{truncateTitle(product.title)}</span>
                 <button className="bg-purple-50 text-purple-600 px-4 py-2 rounded-lg hover:bg-purple-100 transition-colors">
                   Add to Cart
                 </button>

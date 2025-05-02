@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Eye, EyeOff } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
@@ -9,6 +9,12 @@ import { adminLogin } from '../../lib/api/auth/admin'
 
 
 function LoginPage() {
+    useEffect(() => {
+        const user = localStorage.getItem('userAccessToken');
+        if (user) {
+            router.replace('/ShopPage'); // redirect to home
+        }
+    }, []);
     const router = useRouter()
 
     const [email, setEmail] = useState('')
@@ -18,7 +24,7 @@ function LoginPage() {
     const [selectedRole, setSelectedRole] = useState('Customer')
     const [loading, setLoading] = useState(false);
 
-    const handleLogin = async() => {
+    const handleLogin = async () => {
         setLoading(true);
         if (!email || !password) {
             setLoading(false);
@@ -36,7 +42,7 @@ function LoginPage() {
         setError('')
         console.log(`Logging in as ${selectedRole}:`, { email, password })
 
-        if (selectedRole==='Customer') {
+        if (selectedRole === 'Customer') {
             const userDetails = {
                 email: email,
                 password: password,
@@ -49,7 +55,7 @@ function LoginPage() {
                 router.push('/ShopPage');
             }
         }
-        if (selectedRole==='Delivery Partner') {
+        if (selectedRole === 'Delivery Partner') {
             const deliveryPartnerDetails = {
                 email: email,
                 password: password,
@@ -62,7 +68,7 @@ function LoginPage() {
                 router.push('/DeliveryPage');
             }
         }
-        if (selectedRole==='Admin') {
+        if (selectedRole === 'Admin') {
             const adminDetails = {
                 email: email,
                 password: password,

@@ -1,4 +1,5 @@
 export interface Product {
+    model: ReactNode;
     id: number;
     title: string;
     price: number;

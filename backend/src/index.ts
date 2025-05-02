@@ -17,6 +17,7 @@ app.use(morgan('dev'))
 app.use(cors({
   origin: process.env.FRONTEND,
   credentials: true,
+  exposedHeaders: ['authorization'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
