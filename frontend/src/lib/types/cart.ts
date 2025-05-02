@@ -14,5 +14,5 @@ export interface CartItem {
     totalItems: number;
     clearCart: () => void; 
     updateQuantity: (id: number, change: number) => void;
-
-  }
+    removeFromCart: (id: number) => void;
+}

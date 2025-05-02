@@ -46,12 +46,23 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
             )
         );
     };
-    const clearCart = () => setCart([]);
+    const clearCart = () => {
+        setCart([]);
+        localStorage.removeItem('cart');
+      };
+      
+      const removeFromCart = (id: number) => {
+        const updatedCart = cart.filter(item => item.id !== id);
+        setCart(updatedCart);
+        localStorage.setItem('cart', JSON.stringify(updatedCart));
+      };
+      
+    
 
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
 
     return (
-        <CartContext.Provider value={{ cart, addToCart, updateQuantity, totalItems, clearCart }}>
+        <CartContext.Provider value={{ cart, addToCart, updateQuantity, totalItems,removeFromCart , clearCart }}>
             {children}
         </CartContext.Provider>
     );

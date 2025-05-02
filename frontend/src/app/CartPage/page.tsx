@@ -3,10 +3,9 @@ import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import { useCart } from '@/context/CartContext';
 import { useCustomer } from '@/context/UserContext';
-import { useState } from 'react';
 
 export default function CartPage() {
-    const { cart, updateQuantity, clearCart } = useCart();
+    const { cart, updateQuantity, clearCart,removeFromCart  } = useCart();
     const { user } = useCustomer()
     console.log(user)
     const subtotal = cart.reduce((total: any, item: any) => total + item.price * item.quantity, 0);
@@ -48,6 +47,13 @@ export default function CartPage() {
                                     <p className="ml-4 text-black font-semibold">
                                         ${(item.price * item.quantity).toFixed(2)}
                                     </p>
+                                    <button
+                                        onClick={() => removeFromCart(item.id)}
+                                        className="ml-4 px-2 py-1 bg-red-200 text-red-700 rounded hover:bg-red-300"
+                                    >
+                                        Delete
+                                    </button>
+
                                 </div>
                             </div>
                         ))}
