@@ -170,7 +170,7 @@ function LoginPage() {
                 <p className="text-center text-sm text-gray-600 mt-4">
                     Don't have an account?{' '}
                     <button
-                        onClick={() => router.push('/register')}
+                        onClick={() => router.push('/Register')}
                         className="text-black hover:underline font-medium"
                     >
                         Register

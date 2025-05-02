@@ -5,6 +5,8 @@ import { FaShoppingCart } from 'react-icons/fa';
 import { FiLogOut } from 'react-icons/fi';
 import { useRouter } from 'next/navigation'
 import { User } from '@/lib/types/user';
+import toast from 'react-hot-toast';
+import { customerLogout } from '@/lib/api/auth/customer';
 
 function Navbar() {
     const router = useRouter()
@@ -18,6 +20,16 @@ function Navbar() {
             setUserDetails(JSON.parse(storedUserDetails));
         }
     }, []);
+    const handleLogout = () => {
+        (async() => {
+            const response = await customerLogout()
+            localStorage.removeItem('customerDetails');
+            localStorage.removeItem('userAccessToken');
+            toast.success('Logged out successfully!');
+            router.push('/Login')
+        })()
+    };
+
 
     return (
         <div>
@@ -39,12 +51,13 @@ function Navbar() {
                                     Welcome, {userDetails.data.fullName}
                                 </span>
                                 <FiLogOut
+                                    onClick={handleLogout}
                                     className="text-2xl cursor-pointer text-black hover:text-red-500"
                                     title="Logout"
                                 />
                             </div>
                         ) : (
-                            <button onClick={() => router.push('/login')} className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
+                            <button onClick={() => router.push('/Login')} className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
                                 Sign In
                             </button>
                         )}

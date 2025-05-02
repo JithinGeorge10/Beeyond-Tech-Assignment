@@ -183,7 +183,7 @@ function RegisterPage() {
                 <p className="text-center text-sm text-gray-600 mt-4">
                     Already having an account?{' '}
                     <button
-                        onClick={() => router.push('/login')}
+                        onClick={() => router.push('/Login')}
                         className="text-black hover:underline font-medium"
                     >
                         Login

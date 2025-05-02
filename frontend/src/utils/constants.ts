@@ -4,12 +4,14 @@ export const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
   withCredentials: true,
 });
-
+ 
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("customer-token");
+    const token = localStorage.getItem("userAccessToken");
+    console.log(token);
+    
     if (token) {
-      config.headers["Authorization"] = `Bearer ${JSON.parse(token)}`;
+      config.headers["authorization"] = `Bearer ${JSON.parse(token)}`;
     }
     return config;
   },
@@ -27,7 +29,7 @@ export const deliveryPartneraxiosInstance = axios.create({
     (config) => {
       const token = localStorage.getItem("deliveryPartner-token");
       if (token) {
-        config.headers["Authorization"] = `Bearer ${JSON.parse(token)}`;
+        config.headers["authorization"] = `Bearer ${JSON.parse(token)}`;
       }
       return config;
     },
@@ -45,7 +47,7 @@ adminAxiosInstance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("admin-token");
     if (token) {
-      config.headers["Authorization"] = `Bearer ${JSON.parse(token)}`;
+      config.headers["authorization"] = `Bearer ${JSON.parse(token)}`;
     }
     return config;
   },

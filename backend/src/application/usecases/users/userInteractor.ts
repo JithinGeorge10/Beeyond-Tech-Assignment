@@ -49,6 +49,38 @@ export class UserInteractor implements IUserInteractor {
     }
   }
 
+  async blackListedToken(token: string): Promise<any | null> {
+    try {
+      console.log(token);
+      const tokenExist = await this.repository.findByBlackListToken(token);
+
+      if (tokenExist) {
+        throw new ErrorResponse("blackListedToken", 400);
+      }
+
+      let user = await this.repository.addTokenBlackList(token);
+
+    } catch (error: any) {
+      throw new ErrorResponse(error.message, error.status);
+    }
+  }
+
+  
+  async findByBlackListToken(token: string): Promise<any | null> {
+    try {
+      console.log(token);
+      const tokenExist = await this.repository.findByBlackListToken(token);
+
+      if (tokenExist) {
+        throw new ErrorResponse("blackListedToken", 400);
+      }
+
+      let user = await this.repository.addTokenBlackList(token);
+
+    } catch (error: any) {
+      throw new ErrorResponse(error.message, error.status);
+    }
+  }
 
 
 }
