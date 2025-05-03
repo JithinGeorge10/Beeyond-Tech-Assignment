@@ -28,6 +28,7 @@ export class AdminController {
 
             const data = {
                 email: admin?.email,
+                id:admin?.id
             };
 
             const token = this.authService.generateToken(data);
@@ -46,9 +47,82 @@ export class AdminController {
             next(error);
         }
     }
+    
+     async onAllOrders(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+          const user = (req as any).user;
+          console.log(user);
+          
+          if (!user || !user.id) {
+            res.status(403).json({ message: "Unauthorizedd user" });
+            return;
+          }
+          const token = (req as any).token
+          const verifiedToken = await this.interactor.blackListedToken(token);
+          if (!verifiedToken) {
+            res.status(403).json({ message: "Unauthorizeddd user" });
+            return;
+          }
+          const orderData = await this.interactor.getOrders();
+          console.log(orderData);
+    
+          res.status(201).json({
+            success: true,
+            message: 'Fetched orders successfully',
+            data: { orderData }
+          });
+        } catch (error) {
+          next(error);
+        }
+      }
+    
+      
+      async onAllDeliveryPartner(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+          const user = (req as any).user;
+          console.log(user);
+          
+          if (!user || !user.id) {
+            res.status(403).json({ message: "Unauthorizedd user" });
+            return;
+          }
+          const token = (req as any).token
+          const verifiedToken = await this.interactor.blackListedToken(token);
+          if (!verifiedToken) {
+            res.status(403).json({ message: "Unauthorizeddd user" });
+            return;
+          }
+          const orderData = await this.interactor.getDeliveryPartners();
+          console.log(orderData);
+    
+          res.status(201).json({
+            success: true,
+            message: 'Fetched orders successfully',
+            data: { orderData }
+          });
+        } catch (error) {
+          next(error);
+        }
+      }
 
-
-
-
+      
+      async onAdminLogout(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+          const user = (req as any).user; // decoded JWT payload
+          if (!user || !user.id) {
+            res.status(403).json({ message: "Unauthorized user" });
+            return;
+          }
+          const token = (req as any).token
+          await this.interactor.addBlackListedToken(token);
+    
+          res.status(201).json({
+            success: true,
+            message: 'Logged out successfully'
+          });
+        } catch (error) {
+          next(error);
+        }
+      }
 
 }

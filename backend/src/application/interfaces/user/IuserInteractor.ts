@@ -7,7 +7,7 @@ export interface IUserInteractor {
   blackListedToken(token:String): Promise<any | null>;
   addOrder(items:[],total:number,address:string,userId:string): Promise<any | null>;
   getSingleOrder(orderId:string): Promise<any | null>;
-  getOrders(): Promise<any | null>;
+  getOrders(user:string): Promise<any | null>;
   addBlackListedToken(token:String): Promise<any | null>;
 
   

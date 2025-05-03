@@ -178,7 +178,7 @@ export class UserController {
         res.status(403).json({ message: "Unauthorized user" });
         return;
       }
-      const orderData = await this.interactor.getOrders();
+      const orderData = await this.interactor.getOrders(user);
       console.log(orderData);
 
       res.status(201).json({

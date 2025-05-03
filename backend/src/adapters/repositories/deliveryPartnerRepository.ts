@@ -114,12 +114,13 @@ export class DeliveryPartnerRepository implements IDeliveryPartnerRepository {
     }
   }
 
-  async getActiveOrders(userId:string): Promise<any> {
+  async getActiveOrders(userId: string): Promise<any> {
     try {
       console.log('repo reached');
 
       const orders = await Order.find({
-        deliveryPartner: userId,status:'ontheway'
+        deliveryPartner: userId,
+        status: 'ontheway'
       }).sort({ createdAt: -1 });
 
 
@@ -135,13 +136,14 @@ export class DeliveryPartnerRepository implements IDeliveryPartnerRepository {
       throw new ErrorResponse(error.message, error.status || 500);
     }
   }
-  
-  async getDeliveredOrders(userId:string): Promise<any> {
+
+  async getDeliveredOrders(userId: string): Promise<any> {
     try {
       console.log('repo reached');
 
       const orders = await Order.find({
-        deliveryPartner: userId,status:'delivered'
+        deliveryPartner: userId,
+        status: 'delivered'
       }).sort({ createdAt: -1 });
 
 
@@ -157,7 +159,7 @@ export class DeliveryPartnerRepository implements IDeliveryPartnerRepository {
       throw new ErrorResponse(error.message, error.status || 500);
     }
   }
-  
+
   async deliveredOrder(orderId: string): Promise<string> {
     try {
       console.log('repo reached');

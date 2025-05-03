@@ -41,7 +41,7 @@ export const deliveryPartnerLogin = async (deliveryPartnerDetails: deliveryPartn
 
 export const deliveryPartnerLogout = async (): Promise<any> => {
   try {
-    const token = localStorage.getItem("userAccessToken");
+    const token = localStorage.getItem("deliveryPartnerAccessToken");
 
     const response =await axios.delete(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/deliveryPartner/logout`, {
       headers: {

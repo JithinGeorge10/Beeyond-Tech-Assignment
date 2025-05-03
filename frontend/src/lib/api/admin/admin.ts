@@ -1,0 +1,41 @@
+import axios from "axios";
+
+export const fetchAllOrders = async (): Promise<any> => {
+    try {
+      const token = localStorage.getItem("adminAccessToken");
+        console.log(token);
+        
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/admin/allOrders`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+  
+      return response.data;
+    } catch (error: any) {
+      throw error.response?.data || { message: 'all order fetch failed' };
+    }
+  };
+
+  export const fetchAllDeliveryPartners = async (): Promise<any> => {
+    try {
+      const token = localStorage.getItem("adminAccessToken");
+  
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/admin/delivery-partners`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+  
+      return response.data;
+    } catch (error: any) {
+      throw error.response?.data || { message: 'all order fetch failed' };
+    }
+  };
+  

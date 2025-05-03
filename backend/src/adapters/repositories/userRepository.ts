@@ -108,9 +108,9 @@ export class UserRepository implements IUserRepository {
     }
   }
 
-  async getOrders(): Promise<any> {
+  async getOrders(userId:string): Promise<any> {
     try {
-      const orders = await Order.find().sort({ createdAt: -1 });
+      const orders = await Order.find({_id:userId}).sort({ createdAt: -1 });
       const simplifiedOrders = orders.map(order => ({
         orderId: order._id,
         date: order.createdAt,

@@ -99,10 +99,10 @@ export class UserInteractor implements IUserInteractor {
   }
 
   
-  async getOrders(): Promise<any | null> {
+  async getOrders(userId:string): Promise<any | null> {
     try {
     
-      const orderData = await this.repository.getOrders();
+      const orderData = await this.repository.getOrders(userId);
       return orderData
     } catch (error: any) {
       throw new ErrorResponse(error.message, error.status);
