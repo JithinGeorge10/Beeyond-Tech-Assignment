@@ -5,11 +5,18 @@ export interface OrderItem {
   price: string;
   quantity: number;
 }
-
-export interface OrderDocument extends Document {
-  _id: Types.ObjectId; // ✅ explicitly define _id type
-  items: OrderItem[];
+export interface OrderDocument {
+  _id: any;
+  items: {
+    productName: string;
+    price: string;
+    quantity: number;
+  }[];
   total: number;
   address: string;
   userId: Types.ObjectId;
+  status: 'pickup' | 'ontheway' | 'delivered';
+  deliveryPartner?: Types.ObjectId; // this line is the key fix
+  createdAt?: Date;
+  updatedAt?: Date;
 }

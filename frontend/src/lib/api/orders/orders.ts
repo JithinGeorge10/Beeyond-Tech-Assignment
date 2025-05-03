@@ -6,10 +6,9 @@ export const orderItems = async (orderItem: orderItemRequest): Promise<orderItem
   
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/customer/order`,
-        orderItem, // ✅ request body
-        {
+        orderItem,         {
           headers: {
-            Authorization: `Bearer ${token}`, // ✅ this will be accessible as req.headers.authorization
+            Authorization: `Bearer ${token}`, 
           },
           withCredentials: true,
         }

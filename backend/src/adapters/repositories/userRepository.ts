@@ -10,9 +10,7 @@ import { Types } from "mongoose";
 import { OrderDocument } from "../../application/types/order";
 
 export class UserRepository implements IUserRepository {
-  createOrder(items: [], total: number, address: string, userId: string): Promise<any> {
-    throw new Error("Method not implemented.");
-  }
+
   find(filter: any, page: any): Promise<User[]> {
     throw new Error("Method not implemented.");
   }
@@ -78,7 +76,7 @@ export class UserRepository implements IUserRepository {
   }
   
   
-async addOrder(
+async createOrder(
   items: [],
   total: number,
   address: string,

@@ -51,10 +51,11 @@ export default function CartPage() {
             return;
         }
         const items = cart.map(item => ({
-            productName: item.title,
+            productId:item.id,
             price: item.price.toString(),
             quantity: item.quantity
         }));
+    
         const cartDetails = {
             items,
             total: total.toString(),

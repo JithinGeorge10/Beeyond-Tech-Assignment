@@ -113,12 +113,9 @@ export class UserController {
         res.status(403).json({ message: "Unauthorized user" });
         return;
       }
-      console.log(req.body);
       const { items, total, address, userId } = req.body
+  
       const order = await this.interactor.addOrder(items, total, address, userId);
-
-      console.log(order);
-
 
       res.status(201).json({
         success: true,

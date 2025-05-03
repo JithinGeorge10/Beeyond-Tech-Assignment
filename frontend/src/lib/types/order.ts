@@ -5,7 +5,7 @@ export interface orderItemRequest {
     userId: string;
   }
   export interface OrderItem {
-    productName: string;
+    productId: number;
     price: string;       // If you want to keep it numeric, use: number
     quantity: number;
   }
