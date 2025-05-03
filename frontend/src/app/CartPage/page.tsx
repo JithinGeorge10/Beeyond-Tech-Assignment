@@ -20,7 +20,7 @@ export default function CartPage() {
             setIsLoading(true)
             const checkAuthAndLoadUser = async () => {
 
-                const token = localStorage.getItem('userAccessToken'); // assuming token is stored here
+                const token = localStorage.getItem('userAccessToken');
                 if (!token) {
                     router.push('/Login');
                     return;

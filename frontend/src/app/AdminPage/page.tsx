@@ -25,8 +25,8 @@ type Partner = {
 };
 
 const Page = () => {
-        const router = useRouter()
-    
+    const router = useRouter()
+
     const [view, setView] = useState('orders');
     const [orders, setOrders] = useState<Order[]>([]);
     const [partners, setPartners] = useState<Partner[]>([]);
@@ -43,6 +43,37 @@ const Page = () => {
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
     };
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+
+    useEffect(() => {
+        setIsLoading(true);
+        (async () => {
+            try {
+                const token = localStorage.getItem('deliveryPartnerAccessToken');
+                if (!token) {
+                    router.push('/login');
+                    return;
+                }
+
+                const res = await fetch('/api/verify-token', {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                if (res.status !== 200) {
+                    router.push('/login');
+                    return;
+                }
+
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setIsLoading(false);
+            }
+        })();
+    }, [router]);
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -70,7 +101,7 @@ const Page = () => {
     }, [view]);
 
     const handleLogout = () => {
-        (async() => {
+        (async () => {
             const response = await adminLogout()
             localStorage.removeItem('adminDetails');
             localStorage.removeItem('adminAccessToken');
@@ -78,7 +109,13 @@ const Page = () => {
             router.push('/Login')
         })()
     };
-
+    if (isLoading) {
+        return (
+            <div className="text-center py-8">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
+            </div>
+        );
+    }
     return (
         <div className="min-h-screen bg-white text-black flex flex-col font-sans">
             {/* Navbar */}

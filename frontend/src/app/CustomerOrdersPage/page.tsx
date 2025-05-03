@@ -18,8 +18,8 @@ const ORDERS_PER_PAGE = 7;
 function Page() {
     const router = useRouter();
     const [orderData, setOrderData] = useState<Order[]>([]);
-    const [isLoading, setIsLoading] = useState<boolean>(true);
     const [currentPage, setCurrentPage] = useState<number>(1);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     useEffect(() => {
         setIsLoading(true);

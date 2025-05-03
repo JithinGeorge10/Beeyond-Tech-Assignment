@@ -30,6 +30,37 @@ const Page: React.FC = () => {
     const [completedOrders, setCompletedOrders] = useState<Order[]>([]);
     const [currentOrderType, setCurrentOrderType] = useState<OrderType>('available');
 
+   const [isLoading, setIsLoading] = useState<boolean>(true);
+   
+       useEffect(() => {
+           setIsLoading(true);
+           (async () => {
+               try {
+                   const token = localStorage.getItem('deliveryPartnerAccessToken');
+                   if (!token) {
+                       router.push('/login');
+                       return;
+                   }
+   
+                   const res = await fetch('/api/verify-token', {
+                       headers: {
+                           Authorization: `Bearer ${token}`,
+                       },
+                   });
+   
+                   if (res.status !== 200) {
+                       router.push('/login');
+                       return;
+                   }
+
+               } catch (error) {
+                   console.error(error);
+               } finally {
+                   setIsLoading(false);
+               }
+           })();
+       }, [router]);
+
     useEffect(() => {
         const fetchOrders = async () => {
             if (currentOrderType === 'available') {
@@ -76,6 +107,14 @@ const Page: React.FC = () => {
         }
         return title;
     };
+
+    if (isLoading) {
+        return (
+          <div className="text-center py-8">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
+          </div>
+        );
+      }
     const renderOrders = (orders: Order[], type: OrderType): JSX.Element[] => {
         return orders.map((order) => (
             <div

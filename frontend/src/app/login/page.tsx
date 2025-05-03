@@ -12,27 +12,42 @@ function LoginPage() {
     const router = useRouter()
 
     useEffect(() => {
-        const checkToken = async () => {
-            const token = localStorage.getItem('userAccessToken');
-
-            if (!token) return; 
-
-            const res = await fetch('/api/verify-token', {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-
-            const isValid = await res.json();
-            console.log(isValid);
-            
-            if (isValid.success) {
-                router.replace('/ShopPage'); 
+        const checkTokens = async () => {
+            const token1 = localStorage.getItem('userAccessToken');
+            const token2 = localStorage.getItem('adminAccessToken');
+            const token3 = localStorage.getItem('deliveryPartnerAccessToken');
+    
+            const tokens = [
+                { token: token1, redirect: '/ShopPage' },
+                { token: token2, redirect: '/AdminPage' },
+                { token: token3, redirect: '/DeliveryPartnerPage' },
+            ];
+    
+            for (const { token, redirect } of tokens) {
+                if (!token) continue;
+    
+                try {
+                    const res = await fetch('/api/verify-token', {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    });
+    
+                    const isValid = await res.json();
+    
+                    if (isValid.success) {
+                        router.replace(redirect);
+                        return; // stop checking once one token is valid
+                    }
+                } catch (err) {
+                    console.error('Error verifying token:', err);
+                }
             }
         };
-
-        checkToken();
+    
+        checkTokens();
     }, []);
+    
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')

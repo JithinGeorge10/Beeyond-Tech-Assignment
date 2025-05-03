@@ -1,9 +1,10 @@
 import express from 'express'
 import morgan from 'morgan'
 import cors from 'cors'
-import { userRouter } from "./infrastructure/routes/userRoutes";
+import { userRouter } from "./infrastructure/routes/userRoutes"
 import { deliveryPartnerRouter } from "./infrastructure/routes/deliveryPartnerRoutes";
 import { adminRouter } from "./infrastructure/routes/adminRoutes";
+import { healthRouter } from "./infrastructure/routes/healthRoute";
 import { connectDb } from "./infrastructure/db/dbConnection";
 import { errorHandler } from "./infrastructure/middlewares/errorHandler";
 
@@ -20,7 +21,7 @@ app.use(cors({
   exposedHeaders: ['authorization'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
-
+app.use('/', healthRouter);
 app.use("/api/customer", userRouter);
 app.use("/api/deliveryPartner", deliveryPartnerRouter);
 app.use("/api/admin", adminRouter);

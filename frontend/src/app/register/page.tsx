@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Eye, EyeOff } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { customerRegister } from '../../lib/api/auth/customer'
@@ -20,6 +20,42 @@ function RegisterPage() {
     const [loading, setLoading] = useState(false);
 
     const handleRegister = async () => {
+        useEffect(() => {
+            const checkTokens = async () => {
+                const token1 = localStorage.getItem('userAccessToken');
+                const token2 = localStorage.getItem('adminAccessToken');
+                const token3 = localStorage.getItem('deliveryPartnerAccessToken');
+
+                const tokens = [
+                    { token: token1, redirect: '/ShopPage' },
+                    { token: token2, redirect: '/AdminPage' },
+                    { token: token3, redirect: '/DeliveryPartnerPage' },
+                ];
+
+                for (const { token, redirect } of tokens) {
+                    if (!token) continue;
+
+                    try {
+                        const res = await fetch('/api/verify-token', {
+                            headers: {
+                                Authorization: `Bearer ${token}`,
+                            },
+                        });
+
+                        const isValid = await res.json();
+
+                        if (isValid.success) {
+                            router.replace(redirect);
+                            return; // stop checking once one token is valid
+                        }
+                    } catch (err) {
+                        console.error('Error verifying token:', err);
+                    }
+                }
+            };
+
+            checkTokens();
+        }, []);
         try {
             setLoading(true);
 
