@@ -20,5 +20,11 @@ const router = express.Router();
 router.post("/register", signupValidator, controller.onDeliveryPartnerSignUp.bind(controller));
 router.post("/login", loginValidator, controller.onDeliveryPartnerLogin.bind(controller));
 router.get("/orders/unassigned", authenticateToken, controller.onUnassignedOrders.bind(controller));
+router.patch("/orders/accept", authenticateToken, controller.onAcceptOrder.bind(controller));
+router.patch("/orders/delivered", authenticateToken, controller.onDeliverOrder.bind(controller));
+router.get("/orders/activeOrders", authenticateToken, controller.onActiveOrders.bind(controller));
+router.get("/orders/deliveredOrders", authenticateToken, controller.onFetchDeliveredOrders.bind(controller));
+
+
 
 export { router as deliveryPartnerRouter };

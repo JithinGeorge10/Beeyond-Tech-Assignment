@@ -108,5 +108,116 @@ export class DeliveryPartnerController {
     }
   }
 
+  
+
+
+  async onActiveOrders(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const user = (req as any).user;
+      if (!user || !user._id) {
+        res.status(403).json({ message: "Unauthorized user" });
+        return;
+      }
+      const token = (req as any).token
+      const verifiedToken = await this.interactor.blackListedToken(token);
+      if (!verifiedToken) {
+        res.status(403).json({ message: "Unauthorized user" });
+        return;
+      }
+      const orderData = await this.interactor.getActiveOrders(user);
+      console.log(orderData);
+
+      res.status(201).json({
+        success: true,
+        message: 'Fetched orders successfully',
+        data: { orderData }
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+
+  async onFetchDeliveredOrders(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const user = (req as any).user;
+      if (!user || !user._id) {
+        res.status(403).json({ message: "Unauthorized user" });
+        return;
+      }
+      const token = (req as any).token
+      const verifiedToken = await this.interactor.blackListedToken(token);
+      if (!verifiedToken) {
+        res.status(403).json({ message: "Unauthorized user" });
+        return;
+      }
+      const orderData = await this.interactor.getDeliveredOrders(user);
+      console.log(orderData);
+
+      res.status(201).json({
+        success: true,
+        message: 'Fetched orders successfully',
+        data: { orderData }
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+
+  async onAcceptOrder(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const user = (req as any).user;
+      if (!user || !user._id) {
+        res.status(403).json({ message: "Unauthorized user" });
+        return;
+      }
+      const token = (req as any).token
+      const verifiedToken = await this.interactor.blackListedToken(token);
+      if (!verifiedToken) {
+        res.status(403).json({ message: "Unauthorized user" });
+        return;
+      }
+      const { orderId } = req.body; 
+      const orderData = await this.interactor.acceptOrders(orderId,user);
+      console.log(orderData);
+
+      res.status(201).json({
+        success: true,
+        message: 'orders accepted successfully',
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+
+  async onDeliverOrder(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const user = (req as any).user;
+      if (!user || !user._id) {
+        res.status(403).json({ message: "Unauthorized user" });
+        return;
+      }
+      const token = (req as any).token
+      const verifiedToken = await this.interactor.blackListedToken(token);
+      if (!verifiedToken) {
+        res.status(403).json({ message: "Unauthorized user" });
+        return;
+      }
+      const { orderId } = req.body; 
+      const orderData = await this.interactor.deliveredOrders(orderId);
+      console.log(orderData);
+
+      res.status(201).json({
+        success: true,
+        message: 'orders delivered successfully',
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+
 
 }

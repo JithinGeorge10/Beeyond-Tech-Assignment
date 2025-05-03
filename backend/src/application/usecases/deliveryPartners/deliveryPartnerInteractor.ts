@@ -74,6 +74,42 @@ export class DeliveryPartnerInteractor implements IDeliveryPartnerInteractor {
       throw new ErrorResponse(error.message, error.status);
     }
   }
+  
+  async acceptOrders(orderId:string,deliveryPartnerId:string): Promise<any | null> {
+    try {
+      const orderData = await this.repository.acceptOrder(orderId,deliveryPartnerId);
+      return orderData
+    } catch (error: any) {
+      throw new ErrorResponse(error.message, error.status);
+    }
+  }
 
+  
+  async getActiveOrders(userId:string): Promise<any | null> {
+    try {
+      const orderData = await this.repository.getActiveOrders(userId);
+      return orderData
+    } catch (error: any) {
+      throw new ErrorResponse(error.message, error.status);
+    }
 
+  }
+
+  async getDeliveredOrders(userId:string): Promise<any | null> {
+    try {
+      const orderData = await this.repository.getDeliveredOrders(userId);
+      return orderData
+    } catch (error: any) {
+      throw new ErrorResponse(error.message, error.status);
+    }
+
+  }
+  async deliveredOrders(orderId:string): Promise<any | null> {
+    try {
+      const orderData = await this.repository.deliveredOrder(orderId);
+      return orderData
+    } catch (error: any) {
+      throw new ErrorResponse(error.message, error.status);
+    }
+  }
 }

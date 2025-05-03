@@ -1,6 +1,6 @@
 'use client'
 import Footer from '@/components/Footer';
-import { fetchUnassignedOrders } from '@/lib/api/orders/orders';
+import { fetchActiveOrders, fetchDeliveredOrders, fetchUnassignedOrders, orderAccepted, orderDelivered } from '@/lib/api/orders/orders';
 import React, { JSX, useEffect, useState } from 'react';
 
 type OrderItem = {
@@ -26,63 +26,84 @@ const Page: React.FC = () => {
     const [currentOrderType, setCurrentOrderType] = useState<OrderType>('available');
 
     useEffect(() => {
-        (async() => {
-            const response = await fetchUnassignedOrders();
-            setAvailableOrders(response.data.orderData)
-        })()
-    }, []);
+        const fetchOrders = async () => {
+            if (currentOrderType === 'available') {
+                const response = await fetchUnassignedOrders();
+                setAvailableOrders(response.data.orderData);
+            }
+
+            if (currentOrderType === 'active' && activeOrders.length === 0) {
+                const response = await fetchActiveOrders();
+                setActiveOrders(response.data.orderData);
+            }
+
+            if (currentOrderType === 'completed' && activeOrders.length === 0) {
+                const response = await fetchDeliveredOrders();
+                setActiveOrders(response.data.orderData);
+            }
+        };
+
+        fetchOrders();
+    }, [currentOrderType]);
 
 
 
-    const acceptOrder = (order: Order): void => {
+
+    const acceptOrder = async (order: Order): Promise<void> => {
+
+        const response = await orderAccepted(order.id);
+        console.log(response);
+
         setAvailableOrders((prev) => prev.filter((o) => o.id !== order.id));
         setActiveOrders((prev) => [...prev, order]);
     };
 
-    const markAsDelivered = (order: Order): void => {
+    const markAsDelivered = async (order: Order): Promise<void> => {
+        const response = await orderDelivered(order.id);
+        console.log(response);
         setActiveOrders((prev) => prev.filter((o) => o.id !== order.id));
         setCompletedOrders((prev) => [...prev, order]);
     };
     const truncateTitle = (title: string) => {
         const words = title.split(' ');
         if (words.length > 5) {
-          return words.slice(0, 5).join(' ') + '...';
+            return words.slice(0, 5).join(' ') + '...';
         }
         return title;
-      };
+    };
     const renderOrders = (orders: Order[], type: OrderType): JSX.Element[] => {
         return orders.map((order) => (
             <div
-    key={order.id}
-    className={`w-full h-80 p-6 mb-4 rounded-2xl shadow-2xl transition-transform transform hover:scale-[1.02] ${currentOrderType === type ? 'bg-white' : 'bg-gray-100'
-        }`}
->
-    <p className="mb-2"><span className="font-bold text-purple-700">Order ID:</span> {order.id}</p>
-    <p className="mb-1"><span className="font-semibold">Status:</span> {order.status}</p>
-    <p className="mb-1"><span className="font-semibold">Address:</span> {order.address}</p>
-    <p className="mb-2"><span className="font-semibold">Created At:</span> {new Date(order.createdAt).toLocaleString()}</p>
-    <ul className="list-disc list-inside mb-4">
-        {order.items.map((item, index) => (
-            <li key={index}>{truncateTitle(item.productName)} x {item.quantity}</li>
-        ))}
-    </ul>
-    {type === 'available' && (
-        <button
-            onClick={() => acceptOrder(order)}
-            className="mt-3 px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700"
-        >
-            Accept Order
-        </button>
-    )}
-    {type === 'active' && (
-        <button
-            onClick={() => markAsDelivered(order)}
-            className="mt-3 px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700"
-        >
-            Mark as Delivered
-        </button>
-    )}
-</div>
+                key={order.id}
+                className={`w-full h-80 p-6 mb-4 rounded-2xl shadow-2xl transition-transform transform hover:scale-[1.02] ${currentOrderType === type ? 'bg-white' : 'bg-gray-100'
+                    }`}
+            >
+                <p className="mb-2"><span className="font-bold text-purple-700">Order ID:</span> {order.id}</p>
+                <p className="mb-1"><span className="font-semibold">Status:</span> {order.status}</p>
+                <p className="mb-1"><span className="font-semibold">Address:</span> {order.address}</p>
+                <p className="mb-2"><span className="font-semibold">Created At:</span> {new Date(order.createdAt).toLocaleString()}</p>
+                <ul className="list-disc list-inside mb-4">
+                    {order.items.map((item, index) => (
+                        <li key={index}>{truncateTitle(item.productName)} x {item.quantity}</li>
+                    ))}
+                </ul>
+                {type === 'available' && (
+                    <button
+                        onClick={() => acceptOrder(order)}
+                        className="mt-3 px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700"
+                    >
+                        Accept Order
+                    </button>
+                )}
+                {type === 'active' && (
+                    <button
+                        onClick={() => markAsDelivered(order)}
+                        className="mt-3 px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700"
+                    >
+                        Mark as Delivered
+                    </button>
+                )}
+            </div>
 
         ));
     };
@@ -97,7 +118,7 @@ const Page: React.FC = () => {
                         Logout
                     </button>
                 </div>
-    
+
                 {/* Order Category Buttons */}
                 <div className="mb-6">
                     <button
@@ -119,7 +140,7 @@ const Page: React.FC = () => {
                         Completed Orders
                     </button>
                 </div>
-    
+
                 {/* Render Orders */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {currentOrderType === 'available' && renderOrders(availableOrders, 'available')}
@@ -130,7 +151,7 @@ const Page: React.FC = () => {
             <Footer />
         </>
     );
-    
+
 };
 
 export default Page;

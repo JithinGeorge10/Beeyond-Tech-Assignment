@@ -83,11 +83,101 @@ export class DeliveryPartnerRepository implements IDeliveryPartnerRepository {
         createdAt: order.createdAt,
         status: order.status,
         items: order.items,
-        address:order.address
+        address: order.address
       }));
       return simplifiedOrders;
     } catch (error: any) {
       throw new ErrorResponse(error.message, error.status || 500);
     }
   }
+  async acceptOrder(orderId: string, deliveryPartnerId: string): Promise<string> {
+    try {
+      console.log('repo reached');
+      console.log('d' + deliveryPartnerId);
+
+      const updatedOrder = await Order.findByIdAndUpdate(
+        orderId,
+        {
+          status: 'ontheway',
+          deliveryPartner: deliveryPartnerId,
+        },
+        { new: true }
+      );
+
+      if (!updatedOrder) {
+        throw new ErrorResponse('Order not found', 404);
+      }
+
+      return updatedOrder.id;
+    } catch (error: any) {
+      throw new ErrorResponse(error.message, error.status || 500);
+    }
+  }
+
+  async getActiveOrders(userId:string): Promise<any> {
+    try {
+      console.log('repo reached');
+
+      const orders = await Order.find({
+        deliveryPartner: userId
+      }).sort({ createdAt: -1 });
+
+
+      const simplifiedOrders = orders.map(order => ({
+        id: order._id,
+        createdAt: order.createdAt,
+        status: order.status,
+        items: order.items,
+        address: order.address
+      }));
+      return simplifiedOrders;
+    } catch (error: any) {
+      throw new ErrorResponse(error.message, error.status || 500);
+    }
+  }
+  
+  async getDeliveredOrders(userId:string): Promise<any> {
+    try {
+      console.log('repo reached');
+
+      const orders = await Order.find({
+        deliveryPartner: userId,status:'delivered'
+      }).sort({ createdAt: -1 });
+
+
+      const simplifiedOrders = orders.map(order => ({
+        id: order._id,
+        createdAt: order.createdAt,
+        status: order.status,
+        items: order.items,
+        address: order.address
+      }));
+      return simplifiedOrders;
+    } catch (error: any) {
+      throw new ErrorResponse(error.message, error.status || 500);
+    }
+  }
+  
+  async deliveredOrder(orderId: string): Promise<string> {
+    try {
+      console.log('repo reached');
+
+      const updatedOrder = await Order.findByIdAndUpdate(
+        orderId,
+        {
+          status: 'delivered',
+        },
+        { new: true }
+      );
+
+      if (!updatedOrder) {
+        throw new ErrorResponse('Order not found', 404);
+      }
+
+      return updatedOrder.id;
+    } catch (error: any) {
+      throw new ErrorResponse(error.message, error.status || 500);
+    }
+  }
+
 }
