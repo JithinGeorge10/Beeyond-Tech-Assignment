@@ -95,5 +95,14 @@ export class UserInteractor implements IUserInteractor {
     }
   }
 
-
+  
+  async getSingleOrder(orderId: string): Promise<any | null> {
+    try {
+    
+      const orderData = await this.repository.getSingleOrder(orderId);
+      return orderData
+    } catch (error: any) {
+      throw new ErrorResponse(error.message, error.status);
+    }
+  }
 }

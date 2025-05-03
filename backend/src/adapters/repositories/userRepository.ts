@@ -1,8 +1,8 @@
 import { IUserRepository } from "../../application/interfaces/user/IuserRepository";
 import { User } from "../../entities/User";
 import { UserModel } from "../../infrastructure/db/models/userModel";
-import TokenBlacklist from '../../infrastructure/db/models/tokenBlackList'; 
-import Order from '../../infrastructure/db/models/orderModel'; 
+import TokenBlacklist from '../../infrastructure/db/models/tokenBlackList';
+import Order from '../../infrastructure/db/models/orderModel';
 
 import { ErrorResponse } from "../../utils/errors";
 import bcrypt from 'bcrypt';
@@ -60,40 +60,50 @@ export class UserRepository implements IUserRepository {
     }
   }
 
-  
+
   async findByBlackListToken(token: string): Promise<any> {
     try {
       const blacklistedToken = await TokenBlacklist.findOne({ token });
-  
+
       if (blacklistedToken) {
         return { message: "Token is blacklisted" };
       }
-  
-      return null; 
+
+      return null;
     } catch (error: any) {
       throw new ErrorResponse(error.message, error.status || 500);
     }
   }
-  
-  
-async createOrder(
-  items: [],
-  total: number,
-  address: string,
-  userId: string
-): Promise<string | null> {
-  try {
-    const newOrder: OrderDocument = await Order.create({
-      items,
-      total,
-      address,
-      userId: new Types.ObjectId(userId),
-    });
 
-    return newOrder._id.toString();
-  } catch (error: any) {
-    throw new ErrorResponse(error.message, error.status || 500);
+
+  async createOrder(
+    items: [],
+    total: number,
+    address: string,
+    userId: string
+  ): Promise<string | null> {
+    try {
+      const newOrder: OrderDocument = await Order.create({
+        items,
+        total,
+        address,
+        userId: new Types.ObjectId(userId),
+      });
+
+      return newOrder._id.toString();
+    } catch (error: any) {
+      throw new ErrorResponse(error.message, error.status || 500);
+    }
   }
-}
+
+  async getSingleOrder(orderId: string): Promise<any> {
+    try {
+      const orderData = await Order.findOne({ _id:orderId });
+      console.log(orderData);
+      return orderData
+    } catch (error :any) {
+      throw new ErrorResponse(error.message, error.status || 500);
+    }
+  }
 
 }

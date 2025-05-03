@@ -21,6 +21,7 @@ router.post("/register", signupValidator,controller.onCustomerSignUp.bind(contro
 router.post("/login", loginValidator, controller.onCustomerLogin.bind(controller));
 router.post("/order", authenticateToken, controller.onCustomerOrder.bind(controller));
 router.delete("/logout",authenticateToken,controller.onUserLogout.bind(controller));
+router.get("/order/:orderId",authenticateToken,controller.onCustomerSingleOrder.bind(controller));
 
 
 export { router as userRouter };

@@ -6,7 +6,9 @@ export interface IUserRepository {
   addTokenBlackList(token:string): Promise<any>;
   findByBlackListToken(token:string): Promise<any>;
   createOrder(items:[],total:number,address:string,userId:string): Promise<any>;
+  getSingleOrder(orderId:string): Promise<any>;
 
+  
   
   
 }

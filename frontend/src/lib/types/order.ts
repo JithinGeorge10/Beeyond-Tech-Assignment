@@ -16,6 +16,14 @@ export interface orderItemRequest {
     success: boolean;
     message: string;
     data: {
+        message(message: any): unknown;
         orderId: string;
     };
 }
+
+
+export type OrderPageProps = {
+  params: {
+    orderId: string;
+  };
+};

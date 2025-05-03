@@ -18,8 +18,8 @@ const HomePage: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-      const [userDetails, setUserDetails] = useState<User | null>(null);
-  
+  const [userDetails, setUserDetails] = useState<User | null>(null);
+
   const { addToCart, totalItems } = useCart();
   useEffect(() => {
     const fetchProducts = async () => {
@@ -30,7 +30,7 @@ const HomePage: React.FC = () => {
         setProducts(data.products);
         const storedUserDetails = localStorage.getItem('customerDetails');
         if (storedUserDetails) {
-            setUserDetails(JSON.parse(storedUserDetails));
+          setUserDetails(JSON.parse(storedUserDetails));
         }
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Unknown error occurred');
@@ -85,7 +85,7 @@ const HomePage: React.FC = () => {
     const userAccessToken = localStorage.getItem('userAccessToken');
     if (!userAccessToken) {
       toast.error('You must be logged in to add items to the cart.');
-      router.push('/Login'); 
+      router.push('/Login');
       return;
     }
     const cartItems = JSON.parse(localStorage.getItem('cart') || '[]');
@@ -103,7 +103,7 @@ const HomePage: React.FC = () => {
         id: String(product.id),
         title: product.title,
         price: product.price,
-        image:product.image,
+        image: product.image,
         quantity: 1, // Initial quantity is 1
       });
 

@@ -6,6 +6,7 @@ export interface IUserInteractor {
   login(email: string, password: string): Promise<User | null>;
   blackListedToken(token:String): Promise<any | null>;
   addOrder(items:[],total:number,address:string,userId:string): Promise<any | null>;
+  getSingleOrder(orderId:string): Promise<any | null>;
 
   
 }

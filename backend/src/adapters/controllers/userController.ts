@@ -119,10 +119,34 @@ export class UserController {
 
       res.status(201).json({
         success: true,
-        message: 'Logged in successfully',
+        message: 'Order placed successfully',
         data: {
           orderId: order,
         }
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+
+  
+  
+  async onCustomerSingleOrder(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const user = (req as any).user;
+      if (!user || !user._id) {
+        res.status(403).json({ message: "Unauthorized user" });
+        return;
+      }
+      const { orderId } = req.params;
+  
+      const orderData = await this.interactor.getSingleOrder(orderId);
+
+      res.status(201).json({
+        success: true,
+        message: 'Fetched single order successfully',
+        data: {orderData}
       });
     } catch (error) {
       next(error);
