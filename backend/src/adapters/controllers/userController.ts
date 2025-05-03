@@ -113,6 +113,8 @@ export class UserController {
         res.status(403).json({ message: "Unauthorized user" });
         return;
       }
+      const token = (req as any).token
+      await this.interactor.blackListedToken(token);
       const { items, total, address, userId } = req.body
   
       const order = await this.interactor.addOrder(items, total, address, userId);
@@ -139,6 +141,8 @@ export class UserController {
         res.status(403).json({ message: "Unauthorized user" });
         return;
       }
+      const token = (req as any).token
+      await this.interactor.blackListedToken(token);
       const { orderId } = req.params;
   
       const orderData = await this.interactor.getSingleOrder(orderId);
@@ -161,6 +165,8 @@ export class UserController {
         res.status(403).json({ message: "Unauthorized user" });
         return;
       }  
+      const token = (req as any).token
+      await this.interactor.blackListedToken(token);
       const orderData = await this.interactor.getOrders();
       console.log(orderData);
       
