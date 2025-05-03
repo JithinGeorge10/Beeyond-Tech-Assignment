@@ -153,4 +153,25 @@ export class UserController {
     }
   }
 
+  
+  async onCustomerOrders(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const user = (req as any).user;
+      if (!user || !user._id) {
+        res.status(403).json({ message: "Unauthorized user" });
+        return;
+      }  
+      const orderData = await this.interactor.getOrders();
+      console.log(orderData);
+      
+      res.status(201).json({
+        success: true,
+        message: 'Fetched orders successfully',
+        data: {orderData}
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
 }

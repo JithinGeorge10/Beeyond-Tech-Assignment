@@ -11,6 +11,7 @@ import { OrderDocument } from "../../application/types/order";
 
 export class UserRepository implements IUserRepository {
 
+
   find(filter: any, page: any): Promise<User[]> {
     throw new Error("Method not implemented.");
   }
@@ -98,12 +99,30 @@ export class UserRepository implements IUserRepository {
 
   async getSingleOrder(orderId: string): Promise<any> {
     try {
-      const orderData = await Order.findOne({ _id:orderId });
+
+      const orderData = await Order.findOne({ _id: orderId });
       console.log(orderData);
       return orderData
-    } catch (error :any) {
+    } catch (error: any) {
       throw new ErrorResponse(error.message, error.status || 500);
     }
   }
+
+  async getOrders(): Promise<any> {
+    try {
+      const orders = await Order.find().sort({ createdAt: -1 });
+      const simplifiedOrders = orders.map(order => ({
+        orderId: order._id,
+        date: order.createdAt,
+        itemCount: order.items.length,
+        total: order.total,
+        status: order.status
+      }));
+      return simplifiedOrders;
+    } catch (error: any) {
+      throw new ErrorResponse(error.message, error.status || 500);
+    }
+  }
+
 
 }

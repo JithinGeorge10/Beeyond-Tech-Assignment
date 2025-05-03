@@ -7,21 +7,22 @@ import { UserController } from "../../adapters/controllers/userController";
 import { UserRepository } from "../../adapters/repositories/userRepository";
 import { AuthService } from "../services/authService";
 import { UserInteractor } from "../../application/usecases/users/userInteractor";
-import {  authenticateToken } from "../middlewares/isAuthenticated";
+import { authenticateToken } from "../middlewares/isAuthenticated";
 
 const authService = new AuthService();
 const repository = new UserRepository();
 const interactor = new UserInteractor(repository);
-const controller = new UserController(interactor,authService);
+const controller = new UserController(interactor, authService);
 
 
 const router = express.Router();
 
-router.post("/register", signupValidator,controller.onCustomerSignUp.bind(controller));
+router.post("/register", signupValidator, controller.onCustomerSignUp.bind(controller));
 router.post("/login", loginValidator, controller.onCustomerLogin.bind(controller));
+router.delete("/logout", authenticateToken, controller.onUserLogout.bind(controller));
 router.post("/order", authenticateToken, controller.onCustomerOrder.bind(controller));
-router.delete("/logout",authenticateToken,controller.onUserLogout.bind(controller));
-router.get("/order/:orderId",authenticateToken,controller.onCustomerSingleOrder.bind(controller));
+router.get("/order/:orderId", authenticateToken, controller.onCustomerSingleOrder.bind(controller));
+router.get("/orders", authenticateToken, controller.onCustomerOrders.bind(controller));
 
 
 export { router as userRouter };

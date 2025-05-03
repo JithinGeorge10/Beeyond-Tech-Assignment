@@ -20,7 +20,6 @@ const OrderPage = () => {
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        setIsLoading(true)
 
         try {
             (async () => {
@@ -73,7 +72,7 @@ const OrderPage = () => {
         } finally {
             setIsLoading(false)
         }
-    }, [orderId, router]); // Include dependencies
+    }, [orderId, router]); 
     if (isLoading) {
         return (
             <div className="text-center py-8">
@@ -95,9 +94,9 @@ const OrderPage = () => {
             <div className="min-h-screen text-black bg-gray-50 p-6">
                 <div className="max-w-5xl mx-auto bg-white rounded-lg shadow-md p-6 space-y-6">
                     <div className="flex justify-between items-center">
-                        <a href="#" className="text-sm text-blue-600 hover:underline">
+                        <button onClick={()=>router.push('/CustomerOrdersPage')} className="text-sm text-blue-600 hover:underline">
                             ← Back to Orders
-                        </a>
+                        </button>
                         <div className="text-lg text-black font-bold">
                             Order ID: {orderId}
                             <span className="ml-2 text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded-full">

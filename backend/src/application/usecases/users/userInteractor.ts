@@ -105,4 +105,15 @@ export class UserInteractor implements IUserInteractor {
       throw new ErrorResponse(error.message, error.status);
     }
   }
+
+  
+  async getOrders(): Promise<any | null> {
+    try {
+    
+      const orderData = await this.repository.getOrders();
+      return orderData
+    } catch (error: any) {
+      throw new ErrorResponse(error.message, error.status);
+    }
+  }
 }

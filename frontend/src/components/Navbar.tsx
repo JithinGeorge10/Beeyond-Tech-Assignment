@@ -30,12 +30,13 @@ function Navbar() {
         })()
     };
 
+    
 
     return (
         <div>
             <nav className="bg-purple-50 border-b border-purple-100 p-4">
                 <div className="container mx-auto flex justify-between items-center">
-                    <h1 className="text-2xl font-bold text-black">Quick Commerce</h1>
+                    <button onClick={()=>router.push('/ShopPage')} className="text-2xl font-bold text-black">Quick Commerce</button>
                     <div className="flex gap-4 items-center">
                         {userDetails ? (
                             <div className="flex items-center gap-5">
@@ -47,6 +48,9 @@ function Navbar() {
                                         </span>
                                     )}
                                 </div>
+                                <button onClick={()=>router.push('/CustomerOrdersPage')} className='text-black hover:underline'>
+                                    orders
+                                </button>
                                 <span className="text-black font-semibold">
                                     Welcome, {userDetails.data.fullName}
                                 </span>
