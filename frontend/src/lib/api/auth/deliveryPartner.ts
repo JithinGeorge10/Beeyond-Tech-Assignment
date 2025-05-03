@@ -10,6 +10,8 @@ export const deliveryPartnerRegister = async (deliveryPartnerDetails: deliveryPa
     if (token) {
       localStorage.setItem('deliveryPartnerAccessToken', token);
     }
+    localStorage.setItem('deliveryPartnerDetails', JSON.stringify(response.data));
+
     return response.data;
   } catch (error: any) {
     throw error.response?.data || { message: 'Registration failed' };
@@ -26,6 +28,8 @@ export const deliveryPartnerLogin = async (deliveryPartnerDetails: deliveryPartn
     if (token) {
       localStorage.setItem('deliveryPartnerAccessToken', token);
     }
+    localStorage.setItem('deliveryPartnerDetails', JSON.stringify(response.data));
+
     return response.data;
   } catch (error: any) {
     throw error.response?.data || { message: 'Registration failed' };

@@ -49,6 +49,31 @@ export class DeliveryPartnerInteractor implements IDeliveryPartnerInteractor {
     }
   }
 
+  async blackListedToken(token: string): Promise<any | null> {
+    try {
+      console.log(token);
+      const tokenExist = await this.repository.findByBlackListToken(token);
+
+      if (tokenExist) {
+        throw new ErrorResponse("blackListedToken", 400);
+      }
+
+      return 'token verified'
+
+    } catch (error: any) {
+      throw new ErrorResponse(error.message, error.status);
+    }
+  }
+  
+
+  async getOrders(): Promise<any | null> {
+    try {
+      const orderData = await this.repository.getOrders();
+      return orderData
+    } catch (error: any) {
+      throw new ErrorResponse(error.message, error.status);
+    }
+  }
 
 
 }

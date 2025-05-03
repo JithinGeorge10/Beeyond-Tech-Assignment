@@ -61,3 +61,23 @@ export const fetchCustomerOrdersDetail = async (): Promise<any> => {
     throw error.response?.data || { message: 'Order fetch failed' };
   }
 };
+
+
+export const fetchUnassignedOrders = async (): Promise<any> => {
+  try {
+    const token = localStorage.getItem("deliveryPartnerAccessToken");
+
+    const response = await axios.get(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/deliveryPartner/orders/unassigned`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+
+    return response.data;
+  } catch (error: any) {
+    throw error.response?.data || { message: 'Order fetch failed' };
+  }
+};

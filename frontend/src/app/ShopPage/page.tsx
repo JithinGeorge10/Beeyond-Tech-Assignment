@@ -121,7 +121,8 @@ const HomePage: React.FC = () => {
       quantity: 1,
       image: product.image,
       unitPrice: 0,
-      qty: 0
+      qty: 0,
+      productName: product.title
     });
 
   };

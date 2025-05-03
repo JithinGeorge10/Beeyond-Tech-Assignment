@@ -1,4 +1,5 @@
 export interface CartItem {
+    productName: any;
     image: string | Blob | undefined;
     unitPrice: number;
     qty: number;

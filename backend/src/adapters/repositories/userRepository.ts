@@ -81,7 +81,7 @@ export class UserRepository implements IUserRepository {
     items: [],
     total: number,
     address: string,
-    userId: string
+    userId: string,
   ): Promise<string | null> {
     try {
       const newOrder: OrderDocument = await Order.create({

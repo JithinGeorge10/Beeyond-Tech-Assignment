@@ -82,7 +82,7 @@ function LoginPage() {
             console.log(response);
             if (response.success) {
                 toast.success(response.message);
-                router.push('/DeliveryPage');
+                router.push('/DeliveryPartnerPage');
             }
         }
         if (selectedRole === 'Admin') {

@@ -95,7 +95,7 @@ export class UserController {
         return;
       }
       const token = (req as any).token
-      await this.interactor.blackListedToken(token);
+      await this.interactor.addBlackListedToken(token);
 
       res.status(201).json({
         success: true,
@@ -114,9 +114,13 @@ export class UserController {
         return;
       }
       const token = (req as any).token
-      await this.interactor.blackListedToken(token);
-      const { items, total, address, userId } = req.body
-  
+      const verifiedToken = await this.interactor.blackListedToken(token);
+      if (!verifiedToken) {
+        res.status(403).json({ message: "Unauthorized user" });
+        return;
+      }
+      const {  items, total, address, userId } = req.body
+
       const order = await this.interactor.addOrder(items, total, address, userId);
 
       res.status(201).json({
@@ -132,8 +136,8 @@ export class UserController {
   }
 
 
-  
-  
+
+
   async onCustomerSingleOrder(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const user = (req as any).user;
@@ -142,38 +146,45 @@ export class UserController {
         return;
       }
       const token = (req as any).token
-      await this.interactor.blackListedToken(token);
-      const { orderId } = req.params;
-  
+      const verifiedToken = await this.interactor.blackListedToken(token);
+      if (!verifiedToken) {
+        res.status(403).json({ message: "Unauthorized user" });
+        return;
+      } const { orderId } = req.params;
+
       const orderData = await this.interactor.getSingleOrder(orderId);
 
       res.status(201).json({
         success: true,
         message: 'Fetched single order successfully',
-        data: {orderData}
+        data: { orderData }
       });
     } catch (error) {
       next(error);
     }
   }
 
-  
+
   async onCustomerOrders(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const user = (req as any).user;
       if (!user || !user._id) {
         res.status(403).json({ message: "Unauthorized user" });
         return;
-      }  
+      }
       const token = (req as any).token
-      await this.interactor.blackListedToken(token);
+      const verifiedToken = await this.interactor.blackListedToken(token);
+      if (!verifiedToken) {
+        res.status(403).json({ message: "Unauthorized user" });
+        return;
+      }
       const orderData = await this.interactor.getOrders();
       console.log(orderData);
-      
+
       res.status(201).json({
         success: true,
         message: 'Fetched orders successfully',
-        data: {orderData}
+        data: { orderData }
       });
     } catch (error) {
       next(error);

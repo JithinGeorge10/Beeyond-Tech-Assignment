@@ -8,7 +8,9 @@ export interface IUserInteractor {
   addOrder(items:[],total:number,address:string,userId:string): Promise<any | null>;
   getSingleOrder(orderId:string): Promise<any | null>;
   getOrders(): Promise<any | null>;
+  addBlackListedToken(token:String): Promise<any | null>;
 
+  
   
   
 }

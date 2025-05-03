@@ -6,6 +6,7 @@ const orderSchema = new Schema<OrderDocument>(
   {
     items: [
       {
+        productName:String,
         productId: String,
         price: String,
         quantity: Number,
