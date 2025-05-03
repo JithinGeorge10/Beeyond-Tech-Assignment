@@ -10,6 +10,7 @@ export interface IDeliveryPartnerInteractor {
   getActiveOrders(user:string): Promise<any | null>;
   deliveredOrders(orderId:string): Promise<any | null>;
   getDeliveredOrders(user:string): Promise<any | null>;
+  addBlackListedToken(token:String): Promise<any | null>;
 
   
   

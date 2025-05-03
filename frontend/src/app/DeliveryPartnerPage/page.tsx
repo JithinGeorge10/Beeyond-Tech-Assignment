@@ -2,6 +2,9 @@
 import Footer from '@/components/Footer';
 import { fetchActiveOrders, fetchDeliveredOrders, fetchUnassignedOrders, orderAccepted, orderDelivered } from '@/lib/api/orders/orders';
 import React, { JSX, useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation'
+import { deliveryPartnerLogout } from '@/lib/api/auth/deliveryPartner';
 
 type OrderItem = {
     productName: string;
@@ -20,6 +23,8 @@ type Order = {
 type OrderType = 'available' | 'active' | 'completed';
 
 const Page: React.FC = () => {
+    const router = useRouter()
+
     const [availableOrders, setAvailableOrders] = useState<Order[]>([]);
     const [activeOrders, setActiveOrders] = useState<Order[]>([]);
     const [completedOrders, setCompletedOrders] = useState<Order[]>([]);
@@ -39,7 +44,7 @@ const Page: React.FC = () => {
 
             if (currentOrderType === 'completed' && activeOrders.length === 0) {
                 const response = await fetchDeliveredOrders();
-                setActiveOrders(response.data.orderData);
+                setCompletedOrders(response.data.orderData);
             }
         };
 
@@ -75,13 +80,15 @@ const Page: React.FC = () => {
         return orders.map((order) => (
             <div
                 key={order.id}
-                className={`w-full h-80 p-6 mb-4 rounded-2xl shadow-2xl transition-transform transform hover:scale-[1.02] ${currentOrderType === type ? 'bg-white' : 'bg-gray-100'
+                className={`w-full h-100 p-6 mb-4 rounded-2xl shadow-2xl transition-transform transform hover:scale-[1.02] ${currentOrderType === type ? 'bg-white' : 'bg-gray-100'
                     }`}
             >
                 <p className="mb-2"><span className="font-bold text-purple-700">Order ID:</span> {order.id}</p>
                 <p className="mb-1"><span className="font-semibold">Status:</span> {order.status}</p>
                 <p className="mb-1"><span className="font-semibold">Address:</span> {order.address}</p>
                 <p className="mb-2"><span className="font-semibold">Created At:</span> {new Date(order.createdAt).toLocaleString()}</p>
+                <p className="mb-1"><span className="font-semibold">Products:</span></p>
+
                 <ul className="list-disc list-inside mb-4">
                     {order.items.map((item, index) => (
                         <li key={index}>{truncateTitle(item.productName)} x {item.quantity}</li>
@@ -107,14 +114,22 @@ const Page: React.FC = () => {
 
         ));
     };
-
+    const handleLogout = () => {
+        (async () => {
+            const response = await deliveryPartnerLogout()
+            localStorage.removeItem('deliveryPartnerDetails');
+            localStorage.removeItem('deliveryPartnerAccessToken');
+            toast.success('Logged out successfully!');
+            router.push('/Login')
+        })()
+    };
     return (
         <>
             <div className="min-h-screen bg-white text-black p-6">
                 {/* Navbar with Title and Logout */}
                 <div className="flex justify-between items-center mb-6">
                     <h1 className="text-3xl font-bold text-purple-500">Quick Commerce</h1>
-                    <button className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
+                    <button onClick={handleLogout} className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
                         Logout
                     </button>
                 </div>

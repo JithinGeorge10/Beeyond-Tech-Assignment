@@ -24,6 +24,7 @@ router.patch("/orders/accept", authenticateToken, controller.onAcceptOrder.bind(
 router.patch("/orders/delivered", authenticateToken, controller.onDeliverOrder.bind(controller));
 router.get("/orders/activeOrders", authenticateToken, controller.onActiveOrders.bind(controller));
 router.get("/orders/deliveredOrders", authenticateToken, controller.onFetchDeliveredOrders.bind(controller));
+router.delete("/logout", authenticateToken, controller.onUserLogout.bind(controller));
 
 
 

@@ -218,6 +218,23 @@ export class DeliveryPartnerController {
     }
   }
 
+  async onUserLogout(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const user = (req as any).user; // decoded JWT payload
+      if (!user || !user._id) {
+        res.status(403).json({ message: "Unauthorized user" });
+        return;
+      }
+      const token = (req as any).token
+      await this.interactor.addBlackListedToken(token);
 
+      res.status(201).json({
+        success: true,
+        message: 'Logged out successfully'
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 
 }

@@ -104,6 +104,16 @@ export class DeliveryPartnerInteractor implements IDeliveryPartnerInteractor {
     }
 
   }
+  async addBlackListedToken(token: string): Promise<any | null> {
+    try {
+  
+      let user = await this.repository.addTokenBlackList(token);
+      return user
+
+    } catch (error: any) {
+      throw new ErrorResponse(error.message, error.status);
+    }
+  }
   async deliveredOrders(orderId:string): Promise<any | null> {
     try {
       const orderData = await this.repository.deliveredOrder(orderId);

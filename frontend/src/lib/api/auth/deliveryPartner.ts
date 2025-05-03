@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { deliveryPartneraxiosInstance } from '../../../utils/constants';
 import { deliveryPartnerLoginRequest, deliveryPartnerLoginResponse, deliveryPartnerRequest, deliveryPartnerResponse } from '../../types/auth';
 
@@ -33,6 +34,26 @@ export const deliveryPartnerLogin = async (deliveryPartnerDetails: deliveryPartn
     return response.data;
   } catch (error: any) {
     throw error.response?.data || { message: 'Registration failed' };
+  }
+};
+
+
+
+export const deliveryPartnerLogout = async (): Promise<any> => {
+  try {
+    const token = localStorage.getItem("userAccessToken");
+
+    const response =await axios.delete(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/deliveryPartner/logout`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      withCredentials: true 
+    });
+
+    console.log(response);
+    return response
+  } catch (error: any) {
+    throw error.response?.data || { message: 'Login failed' };
   }
 };
 

@@ -119,7 +119,7 @@ export class DeliveryPartnerRepository implements IDeliveryPartnerRepository {
       console.log('repo reached');
 
       const orders = await Order.find({
-        deliveryPartner: userId
+        deliveryPartner: userId,status:'ontheway'
       }).sort({ createdAt: -1 });
 
 
