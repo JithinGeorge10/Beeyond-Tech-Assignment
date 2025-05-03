@@ -37,7 +37,7 @@ function LoginPage() {
     
                     if (isValid.success) {
                         router.replace(redirect);
-                        return; // stop checking once one token is valid
+                        return;
                     }
                 } catch (err) {
                     console.error('Error verifying token:', err);

@@ -36,7 +36,7 @@ const OrderPage = () => {
                 });
 
                 if (res.status !== 200) {
-                    router.push('/login');
+                    router.push('/Login');
                     return;
                 }
 
