@@ -5,7 +5,7 @@ export const orderItems = async (orderItem: orderItemRequest): Promise<orderItem
     const token = localStorage.getItem("userAccessToken");
 
     const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/customer/order`,
+      `/api/v1/customer/order`,
       orderItem, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -27,7 +27,7 @@ export const fetchSingleOrderDetails = async (orderId: any): Promise<any> => {
     const token = localStorage.getItem("userAccessToken");
 
     const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/customer/order/${orderId}`,
+      `/api/v1/customer/order/${orderId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`
@@ -68,7 +68,7 @@ export const fetchUnassignedOrders = async (): Promise<any> => {
     const token = localStorage.getItem("deliveryPartnerAccessToken");
 
     const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/deliveryPartner/orders/unassigned`,
+      `/api/v1/deliveryPartner/orders/unassigned`,
       {
         headers: {
           Authorization: `Bearer ${token}`
@@ -88,7 +88,7 @@ export const orderAccepted = async (id: string): Promise<any> => {
     const token = localStorage.getItem("deliveryPartnerAccessToken");
 
     const response = await axios.patch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/deliveryPartner/orders/accept`,
+      `/api/v1/deliveryPartner/orders/accept`,
       { orderId: id },
       {
         headers: {
@@ -109,7 +109,7 @@ export const fetchActiveOrders = async (): Promise<any> => {
     const token = localStorage.getItem("deliveryPartnerAccessToken");
 
     const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/deliveryPartner/orders/activeOrders`,
+      `/api/v1/deliveryPartner/orders/activeOrders`,
       {
         headers: {
           Authorization: `Bearer ${token}`
@@ -130,7 +130,7 @@ export const orderDelivered = async (id: string): Promise<any> => {
     const token = localStorage.getItem("deliveryPartnerAccessToken");
 
     const response = await axios.patch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/deliveryPartner/orders/delivered`,
+      `/api/v1/deliveryPartner/orders/delivered`,
       { orderId: id },
       {
         headers: {
@@ -153,7 +153,7 @@ export const fetchDeliveredOrders = async (): Promise<any> => {
     const token = localStorage.getItem("deliveryPartnerAccessToken");
 
     const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/deliveryPartner/orders/deliveredOrders`,
+      `/api/v1/deliveryPartner/orders/deliveredOrders`,
       {
         headers: {
           Authorization: `Bearer ${token}`

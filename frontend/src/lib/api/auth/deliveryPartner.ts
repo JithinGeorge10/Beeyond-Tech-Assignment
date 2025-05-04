@@ -4,7 +4,7 @@ import { deliveryPartnerLoginRequest, deliveryPartnerLoginResponse, deliveryPart
 
 export const deliveryPartnerRegister = async (deliveryPartnerDetails: deliveryPartnerRequest): Promise<deliveryPartnerResponse> => {
   try {
-    const response = await deliveryPartneraxiosInstance.post<deliveryPartnerResponse>('/api/deliveryPartner/register', deliveryPartnerDetails);
+    const response = await deliveryPartneraxiosInstance.post<deliveryPartnerResponse>('/api/v1/deliveryPartner/register', deliveryPartnerDetails);
     const token = response.headers['authorization']?.split(' ')[1];
     console.log(token);
 
@@ -22,7 +22,7 @@ export const deliveryPartnerRegister = async (deliveryPartnerDetails: deliveryPa
 
 export const deliveryPartnerLogin = async (deliveryPartnerDetails: deliveryPartnerLoginRequest): Promise<deliveryPartnerLoginResponse> => {
   try {
-    const response = await deliveryPartneraxiosInstance.post<deliveryPartnerLoginResponse>('/api/deliveryPartner/login', deliveryPartnerDetails);
+    const response = await deliveryPartneraxiosInstance.post<deliveryPartnerLoginResponse>('/api/v1/deliveryPartner/login', deliveryPartnerDetails);
     const token = response.headers['authorization']?.split(' ')[1];
     console.log(token);
 
@@ -43,7 +43,7 @@ export const deliveryPartnerLogout = async (): Promise<any> => {
   try {
     const token = localStorage.getItem("deliveryPartnerAccessToken");
 
-    const response =await axios.delete(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/deliveryPartner/logout`, {
+    const response =await axios.delete(`/api/v1/deliveryPartner/logout`, {
       headers: {
         Authorization: `Bearer ${token}`
       },

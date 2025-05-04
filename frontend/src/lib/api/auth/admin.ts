@@ -7,7 +7,7 @@ import { AdminLoginRequest, AdminLoginResponse, LoginRequest, LoginResponse } fr
 
 export const adminLogin = async (adminDetails: AdminLoginRequest): Promise<AdminLoginResponse> => {
   try {
-    const response = await adminAxiosInstance.post<AdminLoginResponse>('/api/admin/login', adminDetails);
+    const response = await adminAxiosInstance.post<AdminLoginResponse>('/api/v1/admin/login', adminDetails);
     const token = response.headers['authorization']?.split(' ')[1];
     console.log(token);
 
@@ -27,7 +27,7 @@ export const adminLogout = async (): Promise<any> => {
   try {
     const token = localStorage.getItem("adminAccessToken");
 
-    const response =await axios.delete(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/admin/logout`, {
+    const response =await axios.delete(`/api/v1/admin/logout`, {
       headers: {
         Authorization: `Bearer ${token}`
       },
