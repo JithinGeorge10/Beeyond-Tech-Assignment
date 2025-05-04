@@ -14,6 +14,7 @@ export interface Product {
   }
 
  export interface ApiResponse {
+    ok: any;
     products: Product[];
     total: number;
     skip: number;

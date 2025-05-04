@@ -25,9 +25,8 @@ const HomePage: React.FC = () => {
     const fetchProducts = async () => {
       try {
         const response = await fetchProductsAPI()
-        if (!response.ok) throw new Error('Failed to fetch products');
-        const data: ApiResponse = await response.json();
-        setProducts(data.products);
+        if (!response) throw new Error('Failed to fetch products');
+        setProducts(response.products);
         const storedUserDetails = localStorage.getItem('customerDetails');
         if (storedUserDetails) {
           setUserDetails(JSON.parse(storedUserDetails));
