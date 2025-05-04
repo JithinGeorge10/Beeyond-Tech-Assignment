@@ -48,7 +48,7 @@ export const fetchCustomerOrdersDetail = async (): Promise<any> => {
     const token = localStorage.getItem("userAccessToken");
 
     const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/customer/orders`,
+      `/api/v1/customer/orders`,
       {
         headers: {
           Authorization: `Bearer ${token}`
