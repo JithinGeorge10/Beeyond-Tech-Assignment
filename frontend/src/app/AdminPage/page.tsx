@@ -49,9 +49,9 @@ const Page = () => {
         setIsLoading(true);
         (async () => {
             try {
-                const token = localStorage.getItem('deliveryPartnerAccessToken');
+                const token = localStorage.getItem('adminAccessToken');
                 if (!token) {
-                    router.push('/login');
+                    router.push('/Login');
                     return;
                 }
 

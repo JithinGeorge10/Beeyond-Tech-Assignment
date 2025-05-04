@@ -108,6 +108,7 @@ function LoginPage() {
 
             const response = await adminLogin(adminDetails)
             console.log(response);
+            
             if (response.success) {
                 toast.success(response.message);
                 router.push('/AdminPage');

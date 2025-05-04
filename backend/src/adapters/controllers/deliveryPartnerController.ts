@@ -63,6 +63,12 @@ export class DeliveryPartnerController {
         fullName: user?.fullName,
         phoneNumber: user?.phoneNumber,
       };
+      if(!data._id){
+        res.status(201).json({
+          success: true,
+          message: 'give proper credentials',
+      });
+      }
       const token = this.authService.generateToken(data);
 
       res.setHeader('Authorization', `Bearer ${token}`);

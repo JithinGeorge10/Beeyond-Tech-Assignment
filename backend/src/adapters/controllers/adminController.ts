@@ -24,12 +24,22 @@ export class AdminController {
 
             const { email, password } = req.body;
 
+
+
             const admin = await this.interactor.adminLogin(email, password);
 
             const data = {
                 email: admin?.email,
                 id:admin?.id
             };
+            console.log(data);
+            
+            if(!data.email){
+              res.status(201).json({
+                success: true,
+                message: 'give proper credentials',
+            });
+            }
 
             const token = this.authService.generateToken(data);
 

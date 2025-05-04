@@ -38,7 +38,7 @@ const Page: React.FC = () => {
                try {
                    const token = localStorage.getItem('deliveryPartnerAccessToken');
                    if (!token) {
-                       router.push('/login');
+                       router.push('/Login');
                        return;
                    }
    

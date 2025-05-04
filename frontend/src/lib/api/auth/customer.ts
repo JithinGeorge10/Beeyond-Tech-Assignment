@@ -11,7 +11,7 @@ export const customerRegister = async (userDetails: RegisterRequest): Promise<Re
     if (token) {
       localStorage.setItem('userAccessToken', token);
     }
-    localStorage.setItem('customerDetails', JSON.stringify(response.data.data));
+    localStorage.setItem('customerDetails', JSON.stringify(response.data));
 
     return response.data;
   } catch (error: any) {

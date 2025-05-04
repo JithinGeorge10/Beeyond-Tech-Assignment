@@ -18,44 +18,44 @@ function RegisterPage() {
     const [showPassword, setShowPassword] = useState(false)
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false);
+    useEffect(() => {
+        const checkTokens = async () => {
+            const token1 = localStorage.getItem('userAccessToken');
+            const token2 = localStorage.getItem('adminAccessToken');
+            const token3 = localStorage.getItem('deliveryPartnerAccessToken');
 
-    const handleRegister = async () => {
-        useEffect(() => {
-            const checkTokens = async () => {
-                const token1 = localStorage.getItem('userAccessToken');
-                const token2 = localStorage.getItem('adminAccessToken');
-                const token3 = localStorage.getItem('deliveryPartnerAccessToken');
+            const tokens = [
+                { token: token1, redirect: '/ShopPage' },
+                { token: token2, redirect: '/AdminPage' },
+                { token: token3, redirect: '/DeliveryPartnerPage' },
+            ];
 
-                const tokens = [
-                    { token: token1, redirect: '/ShopPage' },
-                    { token: token2, redirect: '/AdminPage' },
-                    { token: token3, redirect: '/DeliveryPartnerPage' },
-                ];
+            for (const { token, redirect } of tokens) {
+                if (!token) continue;
 
-                for (const { token, redirect } of tokens) {
-                    if (!token) continue;
+                try {
+                    const res = await fetch('/api/verify-token', {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    });
 
-                    try {
-                        const res = await fetch('/api/verify-token', {
-                            headers: {
-                                Authorization: `Bearer ${token}`,
-                            },
-                        });
+                    const isValid = await res.json();
 
-                        const isValid = await res.json();
-
-                        if (isValid.success) {
-                            router.replace(redirect);
-                            return; // stop checking once one token is valid
-                        }
-                    } catch (err) {
-                        console.error('Error verifying token:', err);
+                    if (isValid.success) {
+                        router.replace(redirect);
+                        return; // stop checking once one token is valid
                     }
+                } catch (err) {
+                    console.error('Error verifying token:', err);
                 }
-            };
+            }
+        };
 
-            checkTokens();
-        }, []);
+        checkTokens();
+    }, []);
+    const handleRegister = async () => {
+
         try {
             setLoading(true);
 
@@ -70,6 +70,12 @@ function RegisterPage() {
                 setError('Please enter a valid email address.')
                 setLoading(false);
                 return
+            }
+            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/
+            if (!passwordRegex.test(password)) {
+                setError('Password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character.');
+                setLoading(false);
+                return;
             }
 
             setError('')

@@ -67,6 +67,12 @@ export class UserController {
         phoneNumber: user?.phoneNumber,
         deliveryAddress: user?.deliveryAddress,
       };
+      if(!data._id){
+        res.status(201).json({
+          success: true,
+          message: 'give proper credentials',
+      });
+      }
       const token = this.authService.generateToken(data);
 
       res.setHeader('Authorization', `Bearer ${token}`);

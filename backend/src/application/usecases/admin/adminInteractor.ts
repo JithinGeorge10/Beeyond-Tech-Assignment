@@ -17,6 +17,8 @@ export class AdminInteractor implements IAdminInteractor {
 
   async adminLogin(email: string, password: string): Promise<Admin | null> {
     try {
+     
+  
       let admin = await this.repository.findByEmailandPassword(email, password);
       console.log(admin);
 
@@ -61,7 +63,8 @@ export class AdminInteractor implements IAdminInteractor {
   }
   async addBlackListedToken(token: string): Promise<any | null> {
     try {
-  
+
+    
       let user = await this.repository.addTokenBlackList(token);
       return user
 

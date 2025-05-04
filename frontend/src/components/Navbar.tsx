@@ -52,7 +52,7 @@ function Navbar() {
                                     orders
                                 </button>
                                 <span className="text-black font-semibold">
-                                    Welcome, {userDetails.data.fullName}
+                                    Welcome, {userDetails?.data?.fullName}
                                 </span>
                                 <FiLogOut
                                     onClick={handleLogout}

@@ -27,7 +27,7 @@ function Page() {
             try {
                 const token = localStorage.getItem('userAccessToken');
                 if (!token) {
-                    router.push('/login');
+                    router.push('/Login');
                     return;
                 }
 
