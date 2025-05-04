@@ -24,9 +24,9 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 app.use('/', healthRouter);
-app.use("/api/customer", userRouter);
-app.use("/api/deliveryPartner", deliveryPartnerRouter);
-app.use("/api/admin", adminRouter);
+app.use("/api/v1/customer", userRouter);
+app.use("/api/v1/deliveryPartner", deliveryPartnerRouter);
+app.use("/api/v1/admin", adminRouter);
 
 app.use(errorHandler);
 
