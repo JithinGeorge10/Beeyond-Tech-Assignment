@@ -1,7 +1,7 @@
 'use client'
 import { useSearchParams } from 'next/navigation'
 import { FaUser, FaPhone, FaHome } from "react-icons/fa";
-import React, { useEffect, useState ,Suspense} from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import { useRouter } from 'next/navigation'
@@ -10,7 +10,7 @@ import { fetchSingleOrderDetails } from '@/lib/api/orders/orders';
 import { ApiResponse } from '@/lib/types/products';
 import { fetchProductsAPI } from '@/lib/api/products/products';
 
-const OrderPageContent  = () => {
+const OrderPageContent = () => {
     const router = useRouter();
     const [userDetails, setUserDetails] = useState<User | null>(null);
     const searchParams = useSearchParams()
@@ -50,12 +50,14 @@ const OrderPageContent  = () => {
                 setOrderData(response.data.orderData);
                 const order = response.data.orderData;
 
-                const fakeAPI = await fetchProductsAPI()
-                const data: ApiResponse = await fakeAPI.json();
 
-                console.log(data.products);
+                const fakeAPI = await fetchProductsAPI()
+                if (!response) throw new Error('Failed to fetch products');
+
+
+                console.log(fakeAPI.products);
                 const itemsWithDetails = order.items.map((item: any) => {
-                    const product = data.products.find(p => p.id == item.productId);
+                    const product = fakeAPI.products.find(p => p.id == item.productId);
                     return {
                         ...item,
                         ...product,
@@ -72,7 +74,7 @@ const OrderPageContent  = () => {
         } finally {
             setIsLoading(false)
         }
-    }, [orderId, router]); 
+    }, [orderId, router]);
     if (isLoading) {
         return (
             <div className="text-center py-8">
@@ -94,7 +96,7 @@ const OrderPageContent  = () => {
             <div className="min-h-screen text-black bg-gray-50 p-6">
                 <div className="max-w-5xl mx-auto bg-white rounded-lg shadow-md p-6 space-y-6">
                     <div className="flex justify-between items-center">
-                        <button onClick={()=>router.push('/CustomerOrdersPage')} className="text-sm text-blue-600 hover:underline">
+                        <button onClick={() => router.push('/CustomerOrdersPage')} className="text-sm text-blue-600 hover:underline">
                             ← Back to Orders
                         </button>
                         <div className="text-lg text-black font-bold">
@@ -201,7 +203,7 @@ const OrderPageContent  = () => {
 const OrderPage = () => {
     return (
         <Suspense fallback={<div>Loading...</div>}>
-            <OrderPageContent  />
+            <OrderPageContent />
         </Suspense>
     );
 };
