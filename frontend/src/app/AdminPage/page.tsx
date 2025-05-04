@@ -1,5 +1,6 @@
 'use client';
 import Footer from '@/components/Footer';
+import Modal from '@/components/Modal';
 import { fetchAllDeliveryPartners, fetchAllOrders } from '@/lib/api/admin/admin';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -7,6 +8,7 @@ import { useRouter } from 'next/navigation'
 import { adminLogout } from '@/lib/api/auth/admin';
 
 type Order = {
+    _id: any;
     orderId: string;
     date: string;
     itemCount: number;
@@ -26,6 +28,8 @@ type Partner = {
 
 const Page = () => {
     const router = useRouter()
+    const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const [view, setView] = useState('orders');
     const [orders, setOrders] = useState<Order[]>([]);
@@ -160,7 +164,7 @@ const Page = () => {
                                     <th className="px-4 py-3">Date</th>
                                     <th className="px-4 py-3">Item Count</th>
                                     <th className="px-4 py-3">Total</th>
-                                    <th className="px-4 py-3">Status</th>
+                                    <th className="px-4 py-3">Live Status</th>
                                     <th className="px-4 py-3">Partner</th>
                                     <th className="px-4 py-3">Address</th>
                                     <th className="px-4 py-3">View</th>
@@ -177,10 +181,7 @@ const Page = () => {
                         <tbody className="text-sm md:text-base">
                             {view === 'orders'
                                 ? currentOrders.map((order, idx) => (
-                                    <tr
-                                        key={idx}
-                                        className=" transition duration-200"
-                                    >
+                                    <tr key={idx} className="transition duration-200">
                                         <td className="px-4 py-3">{order.orderId}</td>
                                         <td className="px-4 py-3">
                                             {new Date(order.date).toLocaleDateString("en-GB")}
@@ -190,19 +191,29 @@ const Page = () => {
                                         <td className="px-4 py-3">{order.status}</td>
                                         <td className="px-4 py-3">{order.deliveryPartner}</td>
                                         <td className="px-4 py-3">{order.address}</td>
-                                        <td className="bg-amber-300  rounded-2xl px-4 py-3">View</td>
+                                        <td className="px-4 py-3">
+                                            <button
+                                                onClick={() => {
+                                                    setSelectedOrder(order);
+                                                    setIsModalOpen(true);
+                                                }}
+                                                className="text-blue-600 hover:underline"
+                                                type="button"
+                                            >
+                                                View
+                                            </button>
+
+                                        </td>
                                     </tr>
                                 ))
                                 : partners.map((partner, idx) => (
-                                    <tr
-                                        key={idx}
-                                        className="transition duration-200"
-                                    >
+                                    <tr key={idx} className="transition duration-200">
                                         <td className="px-4 py-3">{partner.fullName}</td>
                                         <td className="px-4 py-3">{partner.email}</td>
                                         <td className="px-4 py-3">{partner.phoneNumber}</td>
                                     </tr>
                                 ))}
+
                         </tbody>
                     </table>
                     <div className="flex justify-center gap-2 my-4">
@@ -222,6 +233,18 @@ const Page = () => {
 
                 </div>
             </main>
+            {selectedOrder && (
+                <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+                    <h2 className="text-lg font-semibold mb-2">Order Details</h2>
+                    <p><strong>Order ID:</strong> {selectedOrder.orderId}</p>
+                    <p><strong>Date:</strong> {new Date(selectedOrder.date).toLocaleDateString("en-GB")}</p>
+                    <p><strong>Item Count:</strong> {selectedOrder.itemCount}</p>
+                    <p><strong>Total:</strong> ₹{selectedOrder.total}</p>
+                    <p><strong>Status:</strong> {selectedOrder.status}</p>
+                    <p><strong>Delivery Partner:</strong> {selectedOrder.deliveryPartner}</p>
+                    <p><strong>Address:</strong> {selectedOrder.address}</p>
+                </Modal>
+            )}
 
             {/* Footer always at bottom */}
             <Footer />
