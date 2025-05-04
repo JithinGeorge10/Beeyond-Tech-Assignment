@@ -1,7 +1,7 @@
 'use client'
 import { useSearchParams } from 'next/navigation'
 import { FaUser, FaPhone, FaHome } from "react-icons/fa";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState ,Suspense} from 'react';
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import { useRouter } from 'next/navigation'
@@ -10,7 +10,7 @@ import { fetchSingleOrderDetails } from '@/lib/api/orders/orders';
 import { ApiResponse } from '@/lib/types/products';
 import { fetchProductsAPI } from '@/lib/api/products/products';
 
-const OrderPage = () => {
+const OrderPageContent  = () => {
     const router = useRouter();
     const [userDetails, setUserDetails] = useState<User | null>(null);
     const searchParams = useSearchParams()
@@ -198,8 +198,17 @@ const OrderPage = () => {
         </>
     );
 };
-
+const OrderPage = () => {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <OrderPageContent  />
+        </Suspense>
+    );
+};
 export default OrderPage;
+
+
+
 
 
 

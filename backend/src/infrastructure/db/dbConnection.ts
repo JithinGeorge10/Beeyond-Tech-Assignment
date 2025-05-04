@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
-import { config } from "../config/config";
+import { MONGO_URI } from "../../utils/constants";
 
-export const connectDb = async () => {
+export async function connectDb (): Promise<void> {
   try {
-    await mongoose.connect(config.MONGO_URI!);
-    console.log("database connection successfull");
+    await mongoose.connect(MONGO_URI());
+    console.log("MongoDB Atlas connected");
   } catch (error) {
-    console.log("error in deb connection ", error);
+    console.error("MongoDB connection error:", error);
   }
-};
+}

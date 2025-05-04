@@ -1,7 +1,7 @@
 import { jwtVerify } from 'jose';
 import { NextRequest } from 'next/server';
 
-export const userVerifyToken = async (userToken: string, req: NextRequest): Promise<any> => {
+export const userVerifyToken = async (): Promise<any> => {
 try {
   const secret = process.env.NEXT_PUBLIC_JWT_SECRET
   const token = localStorage.getItem('userAccessToken');
