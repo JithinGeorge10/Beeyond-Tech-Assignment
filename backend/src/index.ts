@@ -30,6 +30,6 @@ app.use("/api/admin", adminRouter);
 
 app.use(errorHandler);
 
-app.listen(PORT, () => {
-  console.log('server started at port 4000');
-})
+app.listen(Number(PORT), '0.0.0.0', () => {
+  console.log(`Server started at port ${PORT}`);
+});

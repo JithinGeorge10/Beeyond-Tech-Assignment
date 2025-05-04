@@ -1,8 +1,8 @@
-import Login from './Login/page'
+import HomePage from './ShopPage/page';
 export default function Home() {
   return (
     <>
-    <Login></Login>
+    <HomePage></HomePage>
     </>
   );
 }
