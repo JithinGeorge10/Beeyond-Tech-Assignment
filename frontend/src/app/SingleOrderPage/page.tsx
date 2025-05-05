@@ -150,7 +150,7 @@ const OrderPageContent = () => {
 
                     {/* Order Status */}
                     <div>
-                        <h2 className="text-lg font-semibold mb-4">Order Status</h2>
+                        <h2 className="text-lg font-semibold mb-4">Order status</h2>
                         <div className="flex text-black justify-between items-center">
                             {["pickup", "ontheway", "delivered"].map((step, idx) => (
                                 <div key={idx} className="flex flex-col items-center">

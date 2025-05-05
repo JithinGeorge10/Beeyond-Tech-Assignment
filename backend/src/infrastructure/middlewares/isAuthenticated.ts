@@ -7,7 +7,6 @@ const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 export const authenticateToken = async (req: Request, res: Response, next: NextFunction) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
-    console.log(token);
     
     if (!token) {
         res.status(401).json({ message: "Access token required" });
