@@ -4,6 +4,8 @@ Quick Commerce
 This project is an ecommerce platform supporting multiple user types (Customer, Delivery partner, Admin) ,where the users
 can order products,delivery parnters can pickup , deliver and admin can monitor both as well
 
+Live Link : https://learnmern.site/
+
 2. 🧱 System Architecture Diagram
 
 ![Quick Commerce System Architecture](https://raw.githubusercontent.com/JithinGeorge10/Beeyond-Tech-Assignment/main/quick%20commerce%20system%20architecture.png)
