@@ -176,19 +176,19 @@ const OrderPageContent = () => {
                                                     {truncateTitle(item.title || 'Untitled Product')}
                                                 </p>
                                                 <p className="text-xs text-gray-500">
-                                                    ₹{item.price} × {item.quantity}
+                                                    ${item.price} × {item.quantity}
                                                 </p>
                                             </div>
                                         </div>
                                         <span className="font-semibold text-sm">
-                                            ₹{(item.price * item.quantity).toFixed(2)}
+                                            ${(item.price * item.quantity).toFixed(2)}
                                         </span>
                                     </div>
                                 ))
                             )}
 
                             <div className="text-right space-y-1 pt-4">
-                                <p className="font-semibold">Total: ₹{orderData?.total}</p>
+                                <p className="font-semibold">Total: ${orderData?.total}</p>
                             </div>
                         </div>
                     </div>
