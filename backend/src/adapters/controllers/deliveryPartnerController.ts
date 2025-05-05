@@ -3,6 +3,9 @@ import { IDeliveryPartnerInteractor } from "../../application/interfaces/deliver
 import { validationResult } from "express-validator";
 import { IAuthService } from "../../application/interfaces/service/IAuthService";
 import { ErrorResponse } from "../../utils/errors";
+import { io } from '../../index'; // adjust path if needed
+
+
 
 
 export class DeliveryPartnerController {
@@ -63,11 +66,11 @@ export class DeliveryPartnerController {
         fullName: user?.fullName,
         phoneNumber: user?.phoneNumber,
       };
-      if(!data._id){
+      if (!data._id) {
         res.status(201).json({
           success: true,
           message: 'give proper credentials',
-      });
+        });
       }
       const token = this.authService.generateToken(data);
 
@@ -114,7 +117,7 @@ export class DeliveryPartnerController {
     }
   }
 
-  
+
 
 
   async onActiveOrders(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -184,9 +187,11 @@ export class DeliveryPartnerController {
         res.status(403).json({ message: "Unauthorized user" });
         return;
       }
-      const { orderId } = req.body; 
-      const orderData = await this.interactor.acceptOrders(orderId,user);
-      console.log(orderData);
+
+      const { orderId } = req.body;
+      const orderData = await this.interactor.acceptOrders(orderId, user);
+      console.log('rrr' + orderId);
+      io.emit(`order-status-${orderId}`, 'ontheway');
 
       res.status(201).json({
         success: true,
@@ -211,9 +216,12 @@ export class DeliveryPartnerController {
         res.status(403).json({ message: "Unauthorized user" });
         return;
       }
-      const { orderId } = req.body; 
+      const { orderId } = req.body;
       const orderData = await this.interactor.deliveredOrders(orderId);
       console.log(orderData);
+      console.log('rrr' + orderId);
+
+      io.emit(`order-status-${orderId}`, 'delivered');
 
       res.status(201).json({
         success: true,

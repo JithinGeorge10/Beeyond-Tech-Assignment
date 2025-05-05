@@ -4,7 +4,7 @@ import { LoginRequest, LoginResponse, RegisterRequest, RegisterResponse } from '
 
 export const customerRegister = async (userDetails: RegisterRequest): Promise<RegisterResponse> => {
   try {
-    const response = await axiosInstance.post<RegisterResponse>('/api/v1/customer/register', userDetails);
+    const response = await axiosInstance.post<RegisterResponse>(`/api/v1/customer/register`, userDetails);
     const token = response.headers['authorization']?.split(' ')[1];
     console.log(token);
 
@@ -22,7 +22,7 @@ export const customerRegister = async (userDetails: RegisterRequest): Promise<Re
 
 export const customerLogin = async (userDetails: LoginRequest): Promise<LoginResponse> => {
   try {
-    const response = await axiosInstance.post<LoginResponse>('/api/v1/customer/login', userDetails);
+    const response = await axiosInstance.post<LoginResponse>(`/api/v1/customer/login`, userDetails);
     const token = response.headers['authorization']?.split(' ')[1];
     console.log(token);
 

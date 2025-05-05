@@ -7,8 +7,10 @@ import Navbar from '@/components/Navbar';
 import { useRouter } from 'next/navigation'
 import { User } from '@/lib/types/user';
 import { fetchSingleOrderDetails } from '@/lib/api/orders/orders';
-import { ApiResponse } from '@/lib/types/products';
 import { fetchProductsAPI } from '@/lib/api/products/products';
+import { io } from 'socket.io-client';
+import toast from 'react-hot-toast';
+const socket = io(process.env.NEXT_PUBLIC_API_BASE_URL);
 
 const OrderPageContent = () => {
     const router = useRouter();
@@ -75,6 +77,45 @@ const OrderPageContent = () => {
             setIsLoading(false)
         }
     }, [orderId, router]);
+
+    useEffect(() => {
+        console.log('rrr' + orderId);
+
+        if (!orderId) return;
+
+        socket.on('connect', () => {
+            console.log('Connected to socket:', socket.id);
+        });
+
+        socket.on(`order-status-${orderId}`, (status) => {
+            if (status === 'ontheway') {
+                setOrderData((prevOrderData: any) => {
+                    if (prevOrderData) {
+                        return { ...prevOrderData, status: 'ontheway' };
+                    }
+                    return prevOrderData;
+                });
+                toast.success(`Order status changed to: On the way`);
+            }
+            if (status === 'delivered') {
+                setOrderData((prevOrderData: any) => {
+                    if (prevOrderData) {
+                        return { ...prevOrderData, status: 'delivered' };
+                    }
+                    return prevOrderData;
+                });
+                toast.success(`Order status changed to: Delivered`);
+            }
+
+        });
+
+        return () => {
+            socket.off(`order-status-${orderId}`);
+        };
+    }, [orderId]);
+
+
+
     if (isLoading) {
         return (
             <div className="text-center py-8">
