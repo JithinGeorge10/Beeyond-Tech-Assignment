@@ -42,7 +42,15 @@ cd your-repo
 🐳 Run with Docker Compose
 docker-compose up --build
 
+Run with Docker Compose
 
+npm install
+
+cd frontend
+npm run dev
+
+cd backend
+npm run start
 
 6. ☁️ Hosting & Deployment Steps
 
