@@ -6,130 +6,71 @@ can order products,delivery parnters can pickup , deliver and admin can monitor 
 
 2. 🧱 System Architecture Diagram
 
-+-------------+     +------------------+     +-------------+
-|   Frontend  | <-->|  API Gateway      |<--> | Auth Service |
-+-------------+     +------------------+     +-------------+
-                          |                        |
-                          v                        v
-                   +-------------+        +----------------+
-                   | Chat Service|<-----> | Redis (for pub/sub)
-                   +-------------+        +----------------+
+![Quick Commerce System Architecture](https://raw.githubusercontent.com/JithinGeorge10/Beeyond-Tech-Assignment/main/quick%20commerce%20system%20architecture.png)
+
+
 3. 🛠 Stack Used
-Frontend: React.js, TailwindCSS
+Frontend: Next.js, TailwindCSS
 
 Backend: Node.js, Express
 
-Real-time: WebSocket (Socket.IO)
-
-Database: MongoDB
+Database: MongoDB Atlas
 
 Containerization: Docker, Docker Compose
 
-Messaging: Redis (for scaling WebSocket)
-
-Orchestration: Kubernetes (future)
 
 4. 📁 Folder Structure
-bash
-Copy
-Edit
+
 project-root/
 │
-├── client/                # React frontend
-├── server/
-│   ├── auth-service/      # Handles authentication
-│   ├── chat-service/      # Handles WebSocket connections
-│   ├── api-gateway/       # Aggregates routes
-│   └── shared/            # Common utilities
+├── frontend/                # Next.js frontend
+├── backend/                 # Nodejs backed
 │
 ├── docker-compose.yml
 └── README.md
+
+
 5. ⚙️ Setup Instructions
-🖥 SSH into Server
-bash
-Copy
-Edit
-ssh user@your-server-ip
+
 🧬 Clone the Repository
-bash
-Copy
-Edit
-git clone https://github.com/your-username/your-repo.git
+
+git clone https://github.com/JithinGeorge10/Beeyond-Tech-Assignment.git
 cd your-repo
+
 🐳 Run with Docker Compose
-bash
-Copy
-Edit
 docker-compose up --build
-📁 Required Environment Variables
-Create a .env file in each service directory:
 
-auth-service/.env
-ini
-Copy
-Edit
-PORT=4000
-MONGO_URI=mongodb://mongo:27017/auth-db
-JWT_SECRET=your_jwt_secret
-chat-service/.env
-ini
-Copy
-Edit
-PORT=5000
-REDIS_HOST=redis
-REDIS_PORT=6379
-client/.env
-ini
-Copy
-Edit
-REACT_APP_API_URL=http://localhost:8080
+
+
 6. ☁️ Hosting & Deployment Steps
-Purchase a VM instance (e.g., AWS EC2, DigitalOcean)
 
-SSH into your instance
+Purchased a VM instance--Google Cloud Platform
 
-Install Docker and Docker Compose
+Installed Docker and Docker Compose
 
-Clone the repo and run docker-compose up -d
+Cloned the frontend and backend images from docker hub and run 
 
-Set up a domain and reverse proxy using Nginx or Caddy
+Set up a domain and reverse proxy using Nginx 
 
-Use pm2 (if not using Docker) for Node.js services in production
+Installed SSL certificates
 
-7. 🔌 WebSocket Flow Explanation
-Client connects via Socket.IO to chat-service
+Purchased a domain from hostinger and redirected to the IP generated from instance
 
-JWT token is sent in handshake for authentication
 
-Server verifies token and assigns socket to a room (e.g., based on user ID or chatroom ID)
+7.🔁 Horizontal Scaling via Load Balancer
+Deploy multiple instances of each microservice using Kubernetes 
 
-Events like message:send or message:receive are handled and emitted to corresponding rooms
+Set up an Nginx load balancer in front of api-gateway
 
-Redis is used in production to propagate messages between instances
 
-8. 📈 Scaling Plan
-➕ Redis for Socket Scaling
-Use socket.io-redis or @socket.io/redis-adapter
+8. 🌱 Future Improvements (Optional)
 
-Connect all instances of chat-service to the same Redis pub/sub instance
+Add Online Payments
 
-This allows message propagation across horizontally scaled instances
-
-🔁 Horizontal Scaling via Load Balancer
-Deploy multiple instances of each microservice using Kubernetes or Docker Swarm
-
-Set up an Nginx or HAProxy load balancer in front of api-gateway
-
-Use sticky sessions or token-based reconnection strategies for WebSocket clients
-
-9. 🌱 Future Improvements (Optional)
 Add Kafka for event-driven architecture
-
-Implement microservice health checks and monitoring (Prometheus + Grafana)
 
 Use CI/CD with GitHub Actions and Docker Hub
 
-Add end-to-end testing with Cypress or Playwright
-
 Migrate to a Kubernetes-based deployment
+
 
