@@ -4,7 +4,7 @@ import { deliveryPartnerLoginRequest, deliveryPartnerLoginResponse, deliveryPart
 
 export const deliveryPartnerRegister = async (deliveryPartnerDetails: deliveryPartnerRequest): Promise<deliveryPartnerResponse> => {
   try {
-    const response = await deliveryPartneraxiosInstance.post<deliveryPartnerResponse>(`/api/v1/deliveryPartner/register`, deliveryPartnerDetails);
+    const response = await deliveryPartneraxiosInstance.post<deliveryPartnerResponse>('/api/v1/deliveryPartner/register', deliveryPartnerDetails);
     const token = response.headers['authorization']?.split(' ')[1];
     console.log(token);
 
@@ -22,7 +22,7 @@ export const deliveryPartnerRegister = async (deliveryPartnerDetails: deliveryPa
 
 export const deliveryPartnerLogin = async (deliveryPartnerDetails: deliveryPartnerLoginRequest): Promise<deliveryPartnerLoginResponse> => {
   try {
-    const response = await deliveryPartneraxiosInstance.post<deliveryPartnerLoginResponse>(`/api/v1/deliveryPartner/login`, deliveryPartnerDetails);
+    const response = await deliveryPartneraxiosInstance.post<deliveryPartnerLoginResponse>('/api/v1/deliveryPartner/login', deliveryPartnerDetails);
     const token = response.headers['authorization']?.split(' ')[1];
     console.log(token);
 

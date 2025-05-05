@@ -39,7 +39,6 @@ app.use("/api/v1/customer", userRouter);
 app.use("/api/v1/deliveryPartner", deliveryPartnerRouter);
 app.use("/api/v1/admin", adminRouter);
 
-
 app.use(errorHandler);
 io.on('connection', (socket) => {
   console.log('New client connected', socket.id);

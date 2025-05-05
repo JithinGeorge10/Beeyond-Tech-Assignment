@@ -7,7 +7,7 @@ import { AdminLoginRequest, AdminLoginResponse, LoginRequest, LoginResponse } fr
 
 export const adminLogin = async (adminDetails: AdminLoginRequest): Promise<AdminLoginResponse> => {
   try {
-    const response = await adminAxiosInstance.post<AdminLoginResponse>(`/api/v1/admin/login`, adminDetails);
+    const response = await adminAxiosInstance.post<AdminLoginResponse>('/api/v1/admin/login', adminDetails);
     const token = response.headers['authorization']?.split(' ')[1];
     console.log(token);
 
