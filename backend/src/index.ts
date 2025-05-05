@@ -28,7 +28,7 @@ app.use(express.json());
 const PORT = process.env.PORT || 4000;
 app.use(morgan('dev'))
 
-app.use(cors({
+app.use(cors({  
   origin: process.env.FRONTEND,
   credentials: true,
   exposedHeaders: ['authorization'],

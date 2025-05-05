@@ -10,7 +10,11 @@ import { fetchSingleOrderDetails } from '@/lib/api/orders/orders';
 import { fetchProductsAPI } from '@/lib/api/products/products';
 import { io } from 'socket.io-client';
 import toast from 'react-hot-toast';
-const socket = io(process.env.NEXT_PUBLIC_API_BASE_URL);
+const socket = io(process.env.NEXT_PUBLIC_API_BASE_URL, {
+    transports: ['websocket'],
+    withCredentials: true,
+  });
+  
 
 const OrderPageContent = () => {
     const router = useRouter();
